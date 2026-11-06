@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Sheet 05 - เซนเซอร์รับสัญญาณการเคลื่อนที่</title>
+<link rel="stylesheet" href="sheet.css">
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+<div class="page">
+
+  <div class="sheet-header">
+    <div>
+      <div class="title">📡 Review Sheet หน่วยที่ 5 — เซนเซอร์รับสัญญาณการเคลื่อนที่</div>
+      <div class="sub">EN-132-003 Sensors and Transducers · Motion Sensors</div>
+    </div>
+    <div class="meta">
+      สัปดาห์ที่ 5 · ท 2 / ป 2 ชม. · CLO2, CLO3<br>
+      ใบงานปฏิบัติ 1 ใบงาน
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📌</span> 1. สาระสำคัญ</div>
+        <div class="section-body">
+          <p>เซนเซอร์รับสัญญาณการเคลื่อนที่ (Motion Sensor) เป็นกลุ่มเซนเซอร์ที่ตรวจจับความเร่ง ความเร็วเชิงมุม ระยะใกล้ หรือความเร็วรอบของวัตถุ แล้วแปลงเป็นสัญญาณไฟฟ้าที่วัดค่าได้ กลุ่มแรกคือ Accelerometer และ Gyroscope ซึ่งสร้างด้วยเทคโนโลยี MEMS (Micro-Electro-Mechanical Systems) อาศัยโครงสร้างมวลเฉื่อยขนาดจิ๋วที่เคลื่อนที่ได้เล็กน้อย เมื่อมีความเร่งหรือแรงโคริออลิส (Coriolis Force) กระทำ กลุ่มที่สองคือ Proximity Sensor ซึ่งตรวจจับวัตถุที่อยู่ใกล้โดยไม่ต้องสัมผัส มีทั้งชนิด Inductive (ตรวจจับโลหะด้วยสนามแม่เหล็กไฟฟ้า) …</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🎯</span> 2. จุดประสงค์การเรียน (ทั่วไป)</div>
+        <div class="section-body">
+          <ul class="mini"><li>5.1 เข้าใจหลักการทำงานของแอคเซเลอโรมิเตอร์และไจโรสโคปแบบ MEMS ได้</li><li>5.2 นำความรู้หลักการเซนเซอร์ตรวจจับความใกล้ ตัวเข้ารหัสมุมหมุน และวงจรเชื่อมต่อสัญญาณไปใช้ได้</li><li>5.3 ปฏิบัติการวัดค่าความเร่งและมุมเอียงด้วยโมดูล MPU6050 ผ่านบอร์ด ESP32 ได้ถูกต้องและปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🧩</span> 3. หัวข้อเนื้อหาในหน่วย</div>
+        <div class="section-body">
+          <ul class="mini"><li>5.1 ภาพรวม แอคเซเลอโรมิเตอร์ และไจโรสโคปแบบ MEMS</li><li>5.2 เซนเซอร์ตรวจจับความใกล้ ตัวเข้ารหัสมุมหมุน และวงจรเชื่อมต่อ</li><li>5.3 การวัดค่าความเร่งและมุมเอียงด้วยโมดูล MPU6050</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📝</span> 4. บทสรุป</div>
+        <div class="section-body">
+          <p>เซนเซอร์รับสัญญาณการเคลื่อนที่ครอบคลุม Accelerometer และ Gyroscope แบบ MEMS สำหรับวัดความเร่งและความเร็วเชิงมุม เซนเซอร์ตรวจจับความใกล้ (Proximity Sensor) สำหรับตรวจจับวัตถุโดยไม่สัมผัส และตัวเข้ารหัสมุมหมุน (Rotary Encoder) สำหรับวัดตำแหน่งและความเร็วรอบ การใช้งานต้องคำนึงถึงชนิดสัญญาณเอาต์พุต ระดับแรงดัน และการนับพัลส์ด้วยอินเทอร์รัปต์ให้ถูกต้อง</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">❓</span> 5. คำถามทบทวน (จากแบบฝึกหัดท้ายหน่วย)</div>
+        <div class="section-body">
+          <ul class="mini"><li>จงอธิบายหลักการทำงานของ MEMS Accelerometer</li><li>Coriolis Effect เกี่ยวข้องกับการทำงานของ MEMS Gyroscope อย่างไร</li><li>IMU (Inertial Measurement Unit) คืออะไร และโมดูล MPU6050 ให้ข้อมูลกี่แกน</li><li>จงเปรียบเทียบชนิดวัตถุที่เซนเซอร์ Proximity แบบ Inductive และ Capacitive สามารถตรวจจับได้</li><li>เซนเซอร์ Ultrasonic (เช่น HC-SR04) คำนวณระยะทางจากอะไร</li><li>Incremental Encoder ใช้สัญญาณ Quadrature (Channel A และ B) เพื่อจุดประสงค์ใด</li></ul>
+        </div>
+      </div>
+      <div class="section warn">
+        <div class="section-header"><span class="icon">⚠️</span> ข้อควรระวังด้านความปลอดภัย (ใบงานปฏิบัติ)</div>
+        <div class="section-body">
+          <ul class="mini"><li>รับโมดูล MPU6050 ฉากปรับมุม และอุปกรณ์ประจำกลุ่ม ตรวจสอบอุปกรณ์ และอ่านข้อควรระวังด้านความปลอดภัย</li><li>เตรียมความพร้อมและปฏิบัติตามข้อควรระวังด้านความปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🔧</span> 6. เชื่อมโยงกับใบงานปฏิบัติหน่วยเรียนที่ 5</div>
+        <div class="section-body">
+          <p><span class="accent">การวัดค่าความเร่งและมุมเอียงด้วยโมดูล MPU6050</span><br>เวลาปฏิบัติ 2 ชั่วโมง · ทำแบบทดสอบหลังเรียนหน่วยที่ 5 หลังทบทวน</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">EN-132-003 เซนเซอร์และทรานสดิวเซอร์ · อาจารย์ศิวณุ เหล่าบุตรสา · สาขาวิชาวิศวกรรมเครื่องกลและเมคคาทรอนิกส์ มหาวิทยาลัยกาฬสินธุ์ · ภาคการศึกษาที่ 1/2569</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Sheet 06 - เซนเซอร์รับสัญญาณการไหลและระดับของไหล</title>
+<link rel="stylesheet" href="sheet.css">
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+<div class="page">
+
+  <div class="sheet-header">
+    <div>
+      <div class="title">📡 Review Sheet หน่วยที่ 6 — เซนเซอร์รับสัญญาณการไหลและระดับของไหล</div>
+      <div class="sub">EN-132-003 Sensors and Transducers · Flow and Level Sensors</div>
+    </div>
+    <div class="meta">
+      สัปดาห์ที่ 6 · ท 2 / ป 2 ชม. · CLO2, CLO3<br>
+      ใบงานปฏิบัติ 1 ใบงาน
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📌</span> 1. สาระสำคัญ</div>
+        <div class="section-body">
+          <p>เซนเซอร์รับสัญญาณการไหลและระดับของไหล (Flow and Level Sensor) เป็นกลุ่มเซนเซอร์ที่ใช้ตรวจวัดปริมาณการไหลและระดับของของไหลในระบบท่อและถังเก็บ ซึ่งมีความสำคัญอย่างยิ่งในระบบควบคุมกระบวนการผลิตทางอุตสาหกรรม เซนเซอร์วัดอัตราการไหล (Flow Sensor) มีหลายชนิด เช่น ชนิด Turbine/Hall Effect ที่ใช้ใบพัดหมุนตามการไหลแล้วนับพัลส์จากเซนเซอร์ฮอลล์ ชนิด Ultrasonic ที่วัดผลต่างเวลาการเดินทางของคลื่นเสียงตามและทวนทิศทางการไหล และชนิด Electromagnetic ที่อาศัยกฎการเหนี่ยวนำแม่เหล็กไฟฟ้าของฟาราเดย์กับของไหลที่นำไฟฟ้าได้ …</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🎯</span> 2. จุดประสงค์การเรียน (ทั่วไป)</div>
+        <div class="section-body">
+          <ul class="mini"><li>6.1 นำความรู้หลักการเซนเซอร์วัดอัตราการไหลไปใช้ได้</li><li>6.2 เข้าใจหลักการทำงานของเซนเซอร์วัดระดับของไหลและวงจรเชื่อมต่อสัญญาณได้</li><li>6.3 ปฏิบัติการวัดอัตราการไหลของน้ำด้วยเซนเซอร์ YF-S201 ผ่านบอร์ด ESP32 ได้ถูกต้องและปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🧩</span> 3. หัวข้อเนื้อหาในหน่วย</div>
+        <div class="section-body">
+          <ul class="mini"><li>6.1 ภาพรวมและเซนเซอร์วัดอัตราการไหล</li><li>6.2 เซนเซอร์วัดระดับของไหลและวงจรเชื่อมต่อ</li><li>6.3 การวัดอัตราการไหลของน้ำด้วยเซนเซอร์ YF-S201</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📝</span> 4. บทสรุป</div>
+        <div class="section-body">
+          <p>เซนเซอร์วัดการไหลและระดับของไหลใช้ตรวจวัดอัตราการไหลและระดับของเหลวในระบบท่อและถังเก็บ เซนเซอร์วัดอัตราการไหลมีหลายชนิด เช่น แบบใบพัดฮอลล์ที่ให้เอาต์พุตเป็นพัลส์ และแบบอัลตราโซนิก ส่วนเซนเซอร์วัดระดับมีทั้งแบบสัมผัสและไม่สัมผัส การเลือกใช้ขึ้นกับชนิดของเหลว ย่านการวัด และสภาพแวดล้อม ส่วนการต่อกับไมโครคอนโทรลเลอร์ต้องจัดระดับแรงดันและนับพัลส์หรือวัดเวลาให้ถูกต้อง</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">❓</span> 5. คำถามทบทวน (จากแบบฝึกหัดท้ายหน่วย)</div>
+        <div class="section-body">
+          <ul class="mini"><li>จงอธิบายหลักการทำงานของเซนเซอร์วัดอัตราการไหลชนิด Turbine/Hall Effect</li><li>เหตุใดเซนเซอร์วัดอัตราการไหลชนิด Electromagnetic จึงใช้ได้เฉพาะกับของไหลที่นำไฟฟ้าได้เท่านั้น</li><li>เซนเซอร์วัดอัตราการไหลชนิด Ultrasonic คำนวณอัตราการไหลจากสิ่งใด</li><li>จงอธิบายหลักการทำงานของเซนเซอร์วัดระดับชนิด Float Switch</li><li>เซนเซอร์วัดระดับชนิด Hydrostatic Pressure คำนวณระดับของไหลจากสูตรใด</li><li>จงเปรียบเทียบข้อดีของเซนเซอร์วัดระดับชนิด Capacitive เมื่อเทียบกับชนิด Float Switch</li></ul>
+        </div>
+      </div>
+      <div class="section warn">
+        <div class="section-header"><span class="icon">⚠️</span> ข้อควรระวังด้านความปลอดภัย (ใบงานปฏิบัติ)</div>
+        <div class="section-body">
+          <ul class="mini"><li>เตรียมความพร้อมและปฏิบัติตามข้อควรระวังด้านความปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🔧</span> 6. เชื่อมโยงกับใบงานปฏิบัติหน่วยเรียนที่ 6</div>
+        <div class="section-body">
+          <p><span class="accent">การวัดอัตราการไหลของน้ำด้วยเซนเซอร์ YF-S201</span><br>เวลาปฏิบัติ 2 ชั่วโมง · ทำแบบทดสอบหลังเรียนหน่วยที่ 6 หลังทบทวน</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">EN-132-003 เซนเซอร์และทรานสดิวเซอร์ · อาจารย์ศิวณุ เหล่าบุตรสา · สาขาวิชาวิศวกรรมเครื่องกลและเมคคาทรอนิกส์ มหาวิทยาลัยกาฬสินธุ์ · ภาคการศึกษาที่ 1/2569</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Sheet 08 - วงจรปรับแต่งสัญญาณสำหรับเซนเซอร์</title>
+<link rel="stylesheet" href="sheet.css">
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+<div class="page">
+
+  <div class="sheet-header">
+    <div>
+      <div class="title">📡 Review Sheet หน่วยที่ 8 — วงจรปรับแต่งสัญญาณสำหรับเซนเซอร์</div>
+      <div class="sub">EN-132-003 Sensors and Transducers · Signal Conditioning Circuits for Sensors</div>
+    </div>
+    <div class="meta">
+      สัปดาห์ที่ 9–10 · ท 4 / ป 4 ชม. · CLO2, CLO3<br>
+      ใบงานปฏิบัติ 2 ใบงาน
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📌</span> 1. สาระสำคัญ</div>
+        <div class="section-body">
+          <p>วงจรปรับแต่งสัญญาณ (Signal Conditioning Circuit) ทำหน้าที่ขยาย กรอง และปรับระดับสัญญาณอ่อนหรือมีสัญญาณรบกวนจากเซนเซอร์ให้อยู่ในรูปแบบและช่วงที่เหมาะสมก่อนป้อนเข้าวงจรแปลงสัญญาณอนาล็อกเป็นดิจิทัล (ADC) ของไมโครคอนโทรลเลอร์ โดยอาศัยวงจรขยายเชิงปฏิบัติการ (Operational Amplifier) เป็นองค์ประกอบหลักในการขยาย กรอง และจับคู่อิมพีแดนซ์ ซึ่งช่วยเพิ่มความละเอียดและความแม่นยำของการวัดค่าในระบบเมคคาทรอนิกส์</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🎯</span> 2. จุดประสงค์การเรียน (ทั่วไป)</div>
+        <div class="section-body">
+          <ul class="mini"><li>8.1 นำความรู้หลักการออปแอมป์และวงจรขยายสัญญาณแบบไม่กลับเฟสไปใช้ได้</li><li>8.2 ปฏิบัติการขยายสัญญาณจากเซนเซอร์ LDR ด้วยวงจรขยายแบบไม่กลับเฟสก่อนป้อนเข้า ESP32 ได้ถูกต้องและปลอดภัย</li><li>8.3 นำความรู้หลักการวงจรขยายแบบอินสทรูเมนเทชัน วงจรกรองสัญญาณ และการจับคู่อิมพีแดนซ์ไปใช้ได้</li><li>8.4 ปฏิบัติการกรองสัญญาณรบกวนจากเซนเซอร์ด้วยวงจรกรองความถี่ต่ำผ่านได้ถูกต้องและ ปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🧩</span> 3. หัวข้อเนื้อหาในหน่วย</div>
+        <div class="section-body">
+          <ul class="mini"><li>8.1 ภาพรวม ออปแอมป์ และวงจรขยายสัญญาณแบบไม่กลับเฟส</li><li>8.2 การขยายสัญญาณจากเซนเซอร์ LDR ด้วยวงจรขยายแบบไม่กลับเฟส</li><li>8.3 วงจรขยายแบบอินสทรูเมนเทชัน วงจรกรองสัญญาณ และการจับคู่อิมพีแดนซ์</li><li>8.4 การกรองสัญญาณรบกวนจากเซนเซอร์ด้วยวงจรกรองความถี่ต่ำผ่าน</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📝</span> 4. บทสรุป</div>
+        <div class="section-body">
+          <p>วงจรปรับแต่งสัญญาณทำหน้าที่ขยาย กรอง และปรับระดับสัญญาณจากเซนเซอร์ให้เหมาะสมกับวงจร ADC ของไมโครคอนโทรลเลอร์ โดยมีออปแอมป์เป็นองค์ประกอบหลัก วงจรขยายแบบไม่กลับเฟสใช้ขยายสัญญาณทั่วไป วงจรอินสทรูเมนเทชันแอมป์ลิฟายเออร์เหมาะกับสัญญาณเล็กจากบริดจ์ วงจรกรองใช้ตัดสัญญาณรบกวน และการจับคู่อิมพีแดนซ์ช่วยให้ถ่ายโอนสัญญาณได้ถูกต้อง</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">❓</span> 5. คำถามทบทวน (จากแบบฝึกหัดท้ายหน่วย)</div>
+        <div class="section-body">
+          <ul class="mini"><li>ออปแอมป์อุดมคติมีคุณสมบัติเด่นอย่างไรบ้าง</li><li>จงเขียนสูตรคำนวณอัตราขยายของวงจร Non-inverting Amplifier พร้อมอธิบายตัวแปร</li><li>เหตุใด Instrumentation Amplifier จึงเหมาะกับเซนเซอร์แบบบริดจ์มากกว่า Non-inverting Amplifier ทั่วไป</li><li>วงจรกรองความถี่ต่ำผ่านและความถี่สูงผ่านแตกต่างกันอย่างไร</li><li>วงจร Voltage Follower ใช้แก้ปัญหาใดในการเชื่อมต่อสัญญาณจากเซนเซอร์</li><li>ทำไมจึงต้องเลือกอัตราขยายให้เหมาะสม ไม่สูงเกินไป ในการออกแบบวงจรขยายสัญญาณ</li></ul>
+        </div>
+      </div>
+      <div class="section warn">
+        <div class="section-header"><span class="icon">⚠️</span> ข้อควรระวังด้านความปลอดภัย (ใบงานปฏิบัติ)</div>
+        <div class="section-body">
+          <ul class="mini"><li>รับไอซี LM358 LDR ตัวต้านทาน และอุปกรณ์ประจำกลุ่ม ตรวจสอบอุปกรณ์ และอ่านข้อควรระวังด้านความปลอดภัย</li><li>เตรียมความพร้อมและปฏิบัติตามข้อควรระวังด้านความปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🔧</span> 6. เชื่อมโยงกับใบงานปฏิบัติหน่วยเรียนที่ 8</div>
+        <div class="section-body">
+          <p><span class="accent">การขยายสัญญาณจากเซนเซอร์ LDR ด้วยวงจรขยายแบบไม่กลับเฟส / การกรองสัญญาณรบกวนจากเซนเซอร์ด้วยวงจรกรองความถี่ต่ำผ่าน</span><br>เวลาปฏิบัติ 4 ชั่วโมง · ทำแบบทดสอบหลังเรียนหน่วยที่ 8 หลังทบทวน</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">EN-132-003 เซนเซอร์และทรานสดิวเซอร์ · อาจารย์ศิวณุ เหล่าบุตรสา · สาขาวิชาวิศวกรรมเครื่องกลและเมคคาทรอนิกส์ มหาวิทยาลัยกาฬสินธุ์ · ภาคการศึกษาที่ 1/2569</div>
+</div>
+</body>
+</html>

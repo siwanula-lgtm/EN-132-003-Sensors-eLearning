@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Sheet 04 - เซนเซอร์รับสัญญาณแรงและความดัน</title>
+<link rel="stylesheet" href="sheet.css">
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+<div class="page">
+
+  <div class="sheet-header">
+    <div>
+      <div class="title">📡 Review Sheet หน่วยที่ 4 — เซนเซอร์รับสัญญาณแรงและความดัน</div>
+      <div class="sub">EN-132-003 Sensors and Transducers · Force and Pressure Sensors</div>
+    </div>
+    <div class="meta">
+      สัปดาห์ที่ 4 · ท 2 / ป 2 ชม. · CLO2, CLO3<br>
+      ใบงานปฏิบัติ 1 ใบงาน
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📌</span> 1. สาระสำคัญ</div>
+        <div class="section-body">
+          <p>เซนเซอร์รับสัญญาณแรงและความดัน (Force and Pressure Sensor) เป็นกลุ่มเซนเซอร์ที่แปลงแรงกล ความเครียด หรือความดัน ให้เป็นสัญญาณไฟฟ้าที่วัดค่าได้ หัวใจสำคัญของเซนเซอร์กลุ่มนี้คือ Strain Gauge ซึ่งเป็นตัวต้านทานที่ค่าความต้านทานเปลี่ยนแปลงตามความเครียดเชิงกลที่เกิดขึ้น เมื่อนำ Strain Gauge 4 ตัวมาต่อเป็นวงจรบริดจ์วีตสโตนจะได้ Load Cell ซึ่งใช้วัดแรงหรือน้ำหนักได้อย่างแม่นยำ ส่วนเซนเซอร์วัดความดันอาศัยหลักการคล้ายกันโดยใช้แผ่นไดอะแฟรม (Diaphragm) รับความดันแล้วแปลงเป็นการเปลี่ยนแปลงความต้านทาน (Piezoresistive) …</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🎯</span> 2. จุดประสงค์การเรียน (ทั่วไป)</div>
+        <div class="section-body">
+          <ul class="mini"><li>4.1 เข้าใจหลักการทำงานของสเตรนเกจได้</li><li>4.2 นำความรู้หลักการโหลดเซลล์ วงจรบริดจ์วีตสโตน และเซนเซอร์วัดความดันไปใช้ได้</li><li>4.3 ปฏิบัติการวัดน้ำหนักด้วยโหลดเซลล์และโมดูล HX711 ผ่านบอร์ด ESP32 ได้ถูกต้องและปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🧩</span> 3. หัวข้อเนื้อหาในหน่วย</div>
+        <div class="section-body">
+          <ul class="mini"><li>4.1 ภาพรวมและสเตรนเกจ</li><li>4.2 โหลดเซลล์ วงจรบริดจ์วีตสโตน และเซนเซอร์วัดความดัน</li><li>4.3 การวัดน้ำหนักด้วยโหลดเซลล์และโมดูล HX711</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📝</span> 4. บทสรุป</div>
+        <div class="section-body">
+          <p>เซนเซอร์รับสัญญาณแรงและความดันอาศัย Strain Gauge ซึ่งค่าความต้านทานเปลี่ยนตามความเครียดเชิงกล เมื่อนำ Strain Gauge มาต่อเป็นวงจรบริดจ์วีตสโตนจะได้ Load Cell สำหรับวัดแรงและน้ำหนัก สัญญาณจากบริดจ์มีขนาดเล็กมากจึงต้องใช้วงจรขยายสัญญาณหรือโมดูล ADC ความละเอียดสูง เช่น HX711 ส่วนเซนเซอร์วัดความดันแปลงความดันของของไหลเป็นสัญญาณไฟฟ้าและมีทั้งชนิดแอนะล็อกและดิจิทัล</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">❓</span> 5. คำถามทบทวน (จากแบบฝึกหัดท้ายหน่วย)</div>
+        <div class="section-body">
+          <ul class="mini"><li>จงอธิบายหลักการทำงานของ Strain Gauge เมื่อเกิดแรงดึงกระทำ</li><li>ค่า Gauge Factor (GF) คืออะไร และเหตุใด Semiconductor Strain Gauge จึงมีค่า GF สูงกว่า Metal Strain Gauge มาก</li><li>เหตุใด Load Cell จึงต้องใช้ Strain Gauge 4 ตัวต่อเป็นวงจรบริดจ์วีตสโตนแบบสมบูรณ์ แทนที่จะใช้เพียงตัวเดียว</li><li>จงเปรียบเทียบลักษณะการใช้งานของ Load Cell ชนิด Bending Beam และ Shear Beam</li><li>จงอธิบายหลักการทำงานของเซนเซอร์ความดันชนิด Piezoresistive</li><li>เซนเซอร์ความดันชนิด Capacitive มีหลักการทำงานอย่างไร และมีข้อควรระวังในการออกแบบวงจรอย่างไร</li></ul>
+        </div>
+      </div>
+      <div class="section warn">
+        <div class="section-header"><span class="icon">⚠️</span> ข้อควรระวังด้านความปลอดภัย (ใบงานปฏิบัติ)</div>
+        <div class="section-body">
+          <ul class="mini"><li>รับโหลดเซลล์ โมดูล HX711 น้ำหนักมาตรฐาน และอุปกรณ์ประจำกลุ่ม ตรวจสอบอุปกรณ์ และอ่านข้อควรระวังด้านความปลอดภัย</li><li>เตรียมความพร้อมและปฏิบัติตามข้อควรระวังด้านความปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🔧</span> 6. เชื่อมโยงกับใบงานปฏิบัติหน่วยเรียนที่ 4</div>
+        <div class="section-body">
+          <p><span class="accent">การวัดน้ำหนักด้วยโหลดเซลล์และโมดูล HX711</span><br>เวลาปฏิบัติ 2 ชั่วโมง · ทำแบบทดสอบหลังเรียนหน่วยที่ 4 หลังทบทวน</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">EN-132-003 เซนเซอร์และทรานสดิวเซอร์ · อาจารย์ศิวณุ เหล่าบุตรสา · สาขาวิชาวิศวกรรมเครื่องกลและเมคคาทรอนิกส์ มหาวิทยาลัยกาฬสินธุ์ · ภาคการศึกษาที่ 1/2569</div>
+</div>
+</body>
+</html>

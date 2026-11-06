@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Sheet 07 - เซนเซอร์ตรวจจับปฏิกิริยาทางเคมี</title>
+<link rel="stylesheet" href="sheet.css">
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+<div class="page">
+
+  <div class="sheet-header">
+    <div>
+      <div class="title">📡 Review Sheet หน่วยที่ 7 — เซนเซอร์ตรวจจับปฏิกิริยาทางเคมี</div>
+      <div class="sub">EN-132-003 Sensors and Transducers · Chemical Sensors</div>
+    </div>
+    <div class="meta">
+      สัปดาห์ที่ 7 · ท 2 / ป 2 ชม. · CLO2, CLO3<br>
+      ใบงานปฏิบัติ 1 ใบงาน
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📌</span> 1. สาระสำคัญ</div>
+        <div class="section-body">
+          <p>เซนเซอร์ตรวจจับปฏิกิริยาทางเคมีแปลงปริมาณทางเคมี (ความเป็นกรด-ด่าง, การนำไฟฟ้า, ความเข้มข้นแก๊ส, ความชื้น) เป็นสัญญาณไฟฟ้าโดยอาศัยปฏิกิริยาเคมีไฟฟ้าหรือการเปลี่ยนแปลงคุณสมบัติทางไฟฟ้าของวัสดุตรวจจับเมื่อสัมผัสสารเป้าหมาย ซึ่งสามารถนำไปประมวลผลด้วยไมโครคอนโทรลเลอร์เพื่อควบคุมกระบวนการหรือแจ้งเตือนความปลอดภัยในงานอุตสาหกรรมและการเกษตร</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🎯</span> 2. จุดประสงค์การเรียน (ทั่วไป)</div>
+        <div class="section-body">
+          <ul class="mini"><li>7.1 นำความรู้หลักการเซนเซอร์วัดค่า pH และเซนเซอร์วัดค่าการนำไฟฟ้าไปใช้ได้</li><li>7.2 เข้าใจหลักการทำงานของเซนเซอร์ตรวจจับแก๊ส เซนเซอร์วัดความชื้น และวงจรเชื่อมต่อสัญญาณได้</li><li>7.3 ปฏิบัติการตรวจวัดความเข้มข้นแก๊สด้วยเซนเซอร์ MQ-2 ผ่านบอร์ด ESP32 ได้ถูกต้องและปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🧩</span> 3. หัวข้อเนื้อหาในหน่วย</div>
+        <div class="section-body">
+          <ul class="mini"><li>7.1 ภาพรวม เซนเซอร์วัดค่า pH และเซนเซอร์วัดค่าการนำไฟฟ้า</li><li>7.2 เซนเซอร์ตรวจจับแก๊ส เซนเซอร์วัดความชื้น และวงจรเชื่อมต่อ</li><li>7.3 การตรวจวัดความเข้มข้นแก๊สด้วยเซนเซอร์ MQ-2</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📝</span> 4. บทสรุป</div>
+        <div class="section-body">
+          <p>เซนเซอร์ตรวจจับปฏิกิริยาทางเคมีแปลงปริมาณทางเคมี เช่น ค่า pH การนำไฟฟ้า ความเข้มข้นแก๊ส และความชื้น เป็นสัญญาณไฟฟ้า เซนเซอร์เหล่านี้ต้องผ่านการสอบเทียบเป็นระยะและต้องดูแลรักษาโพรบให้เหมาะสม เพราะค่าที่วัดได้เปลี่ยนไปตามอุณหภูมิและอายุการใช้งาน การสอบเทียบ pH ใช้น้ำยาบัฟเฟอร์อย่างน้อย 2 จุดเพื่อหาความชันและค่าชดเชยของโมดูล</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">❓</span> 5. คำถามทบทวน (จากแบบฝึกหัดท้ายหน่วย)</div>
+        <div class="section-body">
+          <ul class="mini"><li>สมการ Nernst อธิบายความสัมพันธ์ระหว่างสิ่งใด</li><li>เหตุใดการวัดค่าการนำไฟฟ้าจึงต้องชดเชยผลของอุณหภูมิ</li><li>อัตราส่วน Rs/Ro ในเซนเซอร์แก๊สตระกูล MQ มีความหมายอย่างไร</li><li>เซนเซอร์แก๊ส MQ-2, MQ-7 และ MQ-135 แตกต่างกันอย่างไร</li><li>เซนเซอร์ความชื้นแบบ Capacitive แตกต่างจากแบบ Resistive อย่างไร</li><li>เหตุใดเซนเซอร์แก๊สตระกูล MQ จึงต้องมีช่วงเวลาอุ่นเครื่อง (Preheat) ก่อนใช้งาน</li></ul>
+        </div>
+      </div>
+      <div class="section warn">
+        <div class="section-header"><span class="icon">⚠️</span> ข้อควรระวังด้านความปลอดภัย (ใบงานปฏิบัติ)</div>
+        <div class="section-body">
+          <ul class="mini"><li>เตรียมความพร้อมและปฏิบัติตามข้อควรระวังด้านความปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🔧</span> 6. เชื่อมโยงกับใบงานปฏิบัติหน่วยเรียนที่ 7</div>
+        <div class="section-body">
+          <p><span class="accent">การตรวจวัดความเข้มข้นแก๊สด้วยเซนเซอร์ MQ-2</span><br>เวลาปฏิบัติ 2 ชั่วโมง · ทำแบบทดสอบหลังเรียนหน่วยที่ 7 หลังทบทวน</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">EN-132-003 เซนเซอร์และทรานสดิวเซอร์ · อาจารย์ศิวณุ เหล่าบุตรสา · สาขาวิชาวิศวกรรมเครื่องกลและเมคคาทรอนิกส์ มหาวิทยาลัยกาฬสินธุ์ · ภาคการศึกษาที่ 1/2569</div>
+</div>
+</body>
+</html>

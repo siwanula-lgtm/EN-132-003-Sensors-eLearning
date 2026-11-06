@@ -1,0 +1,8 @@
+services:
+  sensors-elearning:
+    build: .
+    image: en-132-003-sensors-elearning:latest
+    container_name: en-132-003-sensors-elearning
+    ports:
+      - "3001:3000"
+    restart: unless-stopped

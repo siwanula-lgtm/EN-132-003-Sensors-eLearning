@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Sheet 03 - เซนเซอร์รับสัญญาณทางแสง</title>
+<link rel="stylesheet" href="sheet.css">
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+<div class="page">
+
+  <div class="sheet-header">
+    <div>
+      <div class="title">📡 Review Sheet หน่วยที่ 3 — เซนเซอร์รับสัญญาณทางแสง</div>
+      <div class="sub">EN-132-003 Sensors and Transducers · Optical Sensors</div>
+    </div>
+    <div class="meta">
+      สัปดาห์ที่ 3 · ท 2 / ป 2 ชม. · CLO2, CLO3<br>
+      ใบงานปฏิบัติ 1 ใบงาน
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📌</span> 1. สาระสำคัญ</div>
+        <div class="section-body">
+          <p>เซนเซอร์รับสัญญาณทางแสง (Optical Sensor) เป็นเซนเซอร์ที่ตรวจจับปริมาณแสงหรือการเปลี่ยนแปลงของแสงแล้วแปลงเป็นสัญญาณไฟฟ้า แบ่งได้เป็น 3 กลุ่มหลักตามหน้าที่การใช้งาน ได้แก่ โฟโต้ไดโอดและโฟโต้ทรานซิสเตอร์ซึ่งเป็นสารกึ่งตัวนำที่ให้กระแสไฟฟ้าตามความเข้มแสงและมีความเร็วในการตอบสนองสูง ตัวต้านทานไวแสง LDR ซึ่งเปลี่ยนค่าความต้านทานตามความเข้มแสง นิยมใช้ในวงจรควบคุมแสงอัตโนมัติ และตัวเข้ารหัสตำแหน่งเชิงแสง (Optical Encoder) ซึ่งใช้แสงร่วมกับแผ่นจานเจาะรูเพื่อตรวจจับตำแหน่งหรือความเร็วของการหมุน …</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🎯</span> 2. จุดประสงค์การเรียน (ทั่วไป)</div>
+        <div class="section-body">
+          <ul class="mini"><li>3.1 เข้าใจหลักการทำงานของโฟโต้ไดโอด โฟโต้ทรานซิสเตอร์ และ LDR ได้</li><li>3.2 นำความรู้หลักการตัวเข้ารหัสตำแหน่งเชิงแสงและวงจรเชื่อมต่อสัญญาณไปใช้ได้</li><li>3.3 ปฏิบัติการวัดความเข้มแสงด้วย LDR ผ่านบอร์ด ESP32 และแสดงผลบน Dashboard ได้ถูกต้องและปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🧩</span> 3. หัวข้อเนื้อหาในหน่วย</div>
+        <div class="section-body">
+          <ul class="mini"><li>3.1 ภาพรวม โฟโต้ไดโอด โฟโต้ทรานซิสเตอร์ และ LDR</li><li>3.2 ตัวเข้ารหัสตำแหน่งเชิงแสงและวงจรเชื่อมต่อ</li><li>3.3 การวัดความเข้มแสงด้วย LDR ผ่านบอร์ด ESP32</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="section">
+        <div class="section-header"><span class="icon">📝</span> 4. บทสรุป</div>
+        <div class="section-body">
+          <p>เซนเซอร์รับสัญญาณทางแสงแปลงความเข้มแสงเป็นสัญญาณไฟฟ้า ได้แก่ โฟโต้ไดโอดและโฟโต้ทรานซิสเตอร์ที่ตอบสนองเร็ว ตัวต้านทานไวแสง LDR ที่เปลี่ยนค่าความต้านทานตามความเข้มแสงและนิยมใช้ในงานควบคุมแสงอัตโนมัติ และตัวเข้ารหัสตำแหน่งเชิงแสงที่ใช้วัดตำแหน่งและมุมหมุน การต่อใช้งานกับไมโครคอนโทรลเลอร์มักใช้วงจรแบ่งแรงดันเพื่อให้ได้แรงดันที่เหมาะสมกับขา ADC</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">❓</span> 5. คำถามทบทวน (จากแบบฝึกหัดท้ายหน่วย)</div>
+        <div class="section-body">
+          <ul class="mini"><li>จงอธิบายหลักการทำงานของโฟโต้ไดโอดในโหมดไบอัสกลับ (Reverse Bias)</li><li>เพราะเหตุใดโฟโต้ทรานซิสเตอร์จึงมีความไวต่อแสงสูงกว่าโฟโต้ไดโอด แต่ตอบสนองช้ากว่า</li><li>จงอธิบายหลักการทำงานของ LDR และยกตัวอย่างการประยุกต์ใช้งาน</li><li>จงเปรียบเทียบข้อดี-ข้อเสียของ Incremental Encoder และ Absolute Encoder อย่างละ 2 ข้อ</li><li>สัญญาณ Quadrature (A/B Channel) ของ Incremental Encoder มีประโยชน์อย่างไรในการตรวจจับทิศทางการหมุน</li><li>หากต้องการนับชิ้นงานบนสายพานลำเลียงที่เคลื่อนที่ด้วยความเร็วสูงมาก ควรเลือกใช้เซนเซอร์แสงชนิดใด เพราะเหตุใด</li></ul>
+        </div>
+      </div>
+      <div class="section warn">
+        <div class="section-header"><span class="icon">⚠️</span> ข้อควรระวังด้านความปลอดภัย (ใบงานปฏิบัติ)</div>
+        <div class="section-body">
+          <ul class="mini"><li>รับโมดูล LDR บอร์ด ESP32 และอุปกรณ์ประจำกลุ่ม ตรวจสอบอุปกรณ์ และอ่านข้อควรระวังด้านความปลอดภัย</li><li>เตรียมความพร้อมและปฏิบัติตามข้อควรระวังด้านความปลอดภัย</li></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="icon">🔧</span> 6. เชื่อมโยงกับใบงานปฏิบัติหน่วยเรียนที่ 3</div>
+        <div class="section-body">
+          <p><span class="accent">การวัดความเข้มแสงด้วย LDR ผ่านบอร์ด ESP32</span><br>เวลาปฏิบัติ 2 ชั่วโมง · ทำแบบทดสอบหลังเรียนหน่วยที่ 3 หลังทบทวน</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">EN-132-003 เซนเซอร์และทรานสดิวเซอร์ · อาจารย์ศิวณุ เหล่าบุตรสา · สาขาวิชาวิศวกรรมเครื่องกลและเมคคาทรอนิกส์ มหาวิทยาลัยกาฬสินธุ์ · ภาคการศึกษาที่ 1/2569</div>
+</div>
+</body>
+</html>
