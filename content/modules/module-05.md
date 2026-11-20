@@ -148,45 +148,46 @@ Rotary Encoder เป็นอุปกรณ์ที่ใช้วัดต�
 
 ตารางที่ 5.3 โค้ดภาษา MicroPython สำหรับการวัดค่าความเร่งและมุมเอียงด้วยโมดูล MPU6050
 
-| \# main.py — ESP32 MicroPython: อ่านค่าความเร่งจากโมดูล MPU6050 ผ่านบัส I2C                 |
-|---------------------------------------------------------------------------------------|
-| \# คำนวณมุมเอียง (Tilt Angle) และส่งออกทาง Serial สำหรับแสดงผลบน Dashboard ของ VS Code    |
-|                                                                                       |
-| from machine import Pin, I2C \# นำเข้าโมดูลควบคุม GPIO และบัส I2C                         |
-| import time \# นำเข้าโมดูลสำหรับหน่วงเวลา                                                 |
-| import math \# นำเข้าโมดูลคณิตศาสตร์สำหรับคำนวณมุม                                          |
-|                                                                                       |
-| MPU_ADDR = 0x68 \# ที่อยู่ I2C มาตรฐานของโมดูล MPU6050                                     |
-| PWR_MGMT_1 = 0x6B \# รีจิสเตอร์ควบคุมการจ่ายพลังงานภายในชิป                                  |
-| ACCEL_XOUT_H = 0x3B \# รีจิสเตอร์เริ่มต้นของค่าความเร่งแกน X (High Byte)                      |
-|                                                                                       |
-| i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=400000) \# เปิดใช้งานบัส I2C ที่ความถี่ 400kHz   |
-| i2c.writeto_mem(MPU_ADDR, PWR_MGMT_1, b'\x00') \# ปลุกชิปให้ออกจากโหมด Sleep             |
-|                                                                                       |
-| def read_word_2c(reg):                                                                |
-|     # อ่านค่า 16 บิต (2 ไบต์) จากรีจิสเตอร์ที่กำหนด แล้วแปลงเป็นเลขจำนวนเต็มมีเครื่องหมาย            |
-|     high = i2c.readfrom_mem(MPU_ADDR, reg, 1)\[0\]                                    |
-|     low = i2c.readfrom_mem(MPU_ADDR, reg + 1, 1)\[0\]                                 |
-|     value = (high \<\< 8) + low                                                       |
-|     if value \>= 0x8000:                                                              |
-|         value -= 0x10000                                                              |
-|     return value                                                                      |
-|                                                                                       |
-| def read_accel_g():                                                                   |
-|     # อ่านค่าความเร่งทั้ง 3 แกนและแปลงหน่วยเป็น g (แรงโน้มถ่วงโลก) ด้วยตัวหาร 16384 สำหรับช่วง ±2g |
-|     ax = read_word_2c(ACCEL_XOUT_H) / 16384.0                                         |
-|     ay = read_word_2c(ACCEL_XOUT_H + 2) / 16384.0                                     |
-|     az = read_word_2c(ACCEL_XOUT_H + 4) / 16384.0                                     |
-|     return ax, ay, az                                                                 |
-|                                                                                       |
-| while True: \# วนซ้ำอ่านค่าตลอดเวลา                                                      |
-|     ax, ay, az = read_accel_g()                                                       |
-|     # คำนวณมุมเอียงรอบแกน X และ Y จากอัตราส่วนความเร่งแต่ละแกน (หน่วยองศา)                   |
-|     angle_x = math.degrees(math.atan2(ay, math.sqrt(ax\*ax + az\*az)))                |
-|     angle_y = math.degrees(math.atan2(-ax, math.sqrt(ay\*ay + az\*az)))               |
-|     # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้   |
-|     print("AngleX:{:.1f} AngleY:{:.1f}".format(angle_x, angle_y))                     |
-|     time.sleep(0.2) \# หน่วงเวลา 0.2 วินาทีก่อนอ่านค่ารอบถัดไป                               |
+```python
+# main.py — ESP32 MicroPython: อ่านค่าความเร่งจากโมดูล MPU6050 ผ่านบัส I2C
+# คำนวณมุมเอียง (Tilt Angle) และส่งออกทาง Serial สำหรับแสดงผลบน Dashboard ของ VS Code
+
+from machine import Pin, I2C   # นำเข้าโมดูลควบคุม GPIO และบัส I2C
+import time                     # นำเข้าโมดูลสำหรับหน่วงเวลา
+import math                     # นำเข้าโมดูลคณิตศาสตร์สำหรับคำนวณมุม
+
+MPU_ADDR = 0x68                 # ที่อยู่ I2C มาตรฐานของโมดูล MPU6050
+PWR_MGMT_1 = 0x6B               # รีจิสเตอร์ควบคุมการจ่ายพลังงานภายในชิป
+ACCEL_XOUT_H = 0x3B             # รีจิสเตอร์เริ่มต้นของค่าความเร่งแกน X (High Byte)
+
+i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=400000)   # เปิดใช้งานบัส I2C ที่ความถี่ 400kHz
+i2c.writeto_mem(MPU_ADDR, PWR_MGMT_1, b'\x00')        # ปลุกชิปให้ออกจากโหมด Sleep
+
+def read_word_2c(reg):
+    # อ่านค่า 16 บิต (2 ไบต์) จากรีจิสเตอร์ที่กำหนด แล้วแปลงเป็นเลขจำนวนเต็มมีเครื่องหมาย
+    high = i2c.readfrom_mem(MPU_ADDR, reg, 1)[0]
+    low = i2c.readfrom_mem(MPU_ADDR, reg + 1, 1)[0]
+    value = (high << 8) + low
+    if value >= 0x8000:
+        value -= 0x10000
+    return value
+
+def read_accel_g():
+    # อ่านค่าความเร่งทั้ง 3 แกนและแปลงหน่วยเป็น g (แรงโน้มถ่วงโลก) ด้วยตัวหาร 16384 สำหรับช่วง ±2g
+    ax = read_word_2c(ACCEL_XOUT_H) / 16384.0
+    ay = read_word_2c(ACCEL_XOUT_H + 2) / 16384.0
+    az = read_word_2c(ACCEL_XOUT_H + 4) / 16384.0
+    return ax, ay, az
+
+while True:                         # วนซ้ำอ่านค่าตลอดเวลา
+    ax, ay, az = read_accel_g()
+    # คำนวณมุมเอียงรอบแกน X และ Y จากอัตราส่วนความเร่งแต่ละแกน (หน่วยองศา)
+    angle_x = math.degrees(math.atan2(ay, math.sqrt(ax*ax + az*az)))
+    angle_y = math.degrees(math.atan2(-ax, math.sqrt(ay*ay + az*az)))
+    # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้
+    print("AngleX:{:.1f} AngleY:{:.1f}".format(angle_x, angle_y))
+    time.sleep(0.2)                 # หน่วงเวลา 0.2 วินาทีก่อนอ่านค่ารอบถัดไป
+```
 
 1\. เปิดโปรแกรม Visual Studio Code แล้วติดตั้งส่วนขยาย 'MicroPico' (หรือ 'Pymakr') จาก Extensions Marketplace เพื่อเชื่อมต่อและอัปโหลดโค้ดไปยัง ESP32
 

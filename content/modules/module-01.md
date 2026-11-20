@@ -138,25 +138,26 @@
 
 ตารางที่ 1.3 โค้ดภาษา MicroPython สำหรับการสำรวจและจำแนกประเภทเซนเซอร์ในชุดฝึกปฏิบัติการเมคคาทรอนิกส์
 
-| from machine import ADC, Pin  |
-|-------------------------------|
-| import time                   |
-|                               |
-| adc = ADC(Pin(34))            |
-| \# ช่วงวัดประมาณ 0 - 3.3 V      |
-| adc.atten(ADC.ATTN_11DB)      |
-|                               |
-| def read_volt(n=32):          |
-| s = 0                         |
-| \# เฉลี่ย 32 ครั้งเพื่อลดสัญญาณรบกวน |
-| for \_ in range(n):           |
-| s += adc.read_u16()           |
-| return s / n / 65535 \* 3.3   |
-|                               |
-| while True:                   |
-| v = read_volt()               |
-| print("ADC = %.3f V" % v)     |
-| time.sleep(0.5)               |
+```python
+from machine import ADC, Pin
+import time
+
+adc = ADC(Pin(34))
+# ช่วงวัดประมาณ 0 - 3.3 V
+adc.atten(ADC.ATTN_11DB)
+
+def read_volt(n=32):
+    s = 0
+    # เฉลี่ย 32 ครั้งเพื่อลดสัญญาณรบกวน
+    for _ in range(n):
+        s += adc.read_u16()
+    return s / n / 65535 * 3.3
+
+while True:
+    v = read_volt()
+    print("ADC = %.3f V" % v)
+    time.sleep(0.5)
+```
 
 1\. ต่อวงจรวัดค่าเอาต์พุตเบื้องต้นของเซนเซอร์อย่างน้อย 2 ชนิดด้วยมัลติมิเตอร์ (เช่น วัดความต้านทานของ LDR ภายใต้แสงต่างระดับ)
 

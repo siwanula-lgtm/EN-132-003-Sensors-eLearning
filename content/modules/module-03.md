@@ -153,32 +153,33 @@ Optical Encoder แบ่งเป็น 2 ชนิดหลัก คือ In
 
 ตารางที่ 3.3 โค้ดภาษา MicroPython สำหรับการวัดความเข้มแสงด้วย LDR ผ่านบอร์ด ESP32
 
-| \# main.py — ESP32 MicroPython: อ่านค่าความเข้มแสงจาก LDR และส่งออกทาง Serial               |
-|-----------------------------------------------------------------------------------------|
-| \# สำหรับแสดงผลบน Dashboard ของ VS Code (Serial Plotter Extension)                       |
-|                                                                                         |
-| from machine import Pin, ADC \# นำเข้าโมดูลควบคุมขา GPIO และตัวแปลงสัญญาณอนาล็อกเป็นดิจิทัล (ADC) |
-| import time \# นำเข้าโมดูลสำหรับหน่วงเวลา                                                   |
-|                                                                                         |
-| ldr_pin = ADC(Pin(34)) \# กำหนดให้ขา GPIO34 ทำงานเป็นอินพุต ADC (ต่อกับจุด Vout ของวงจร LDR)   |
-| ldr_pin.atten(ADC.ATTN_11DB) \# ตั้งค่าช่วงการวัดแรงดันของ ADC ให้ครอบคลุม 0-3.3V               |
-| ldr_pin.width(ADC.WIDTH_12BIT) \# ตั้งค่าความละเอียดการอ่านค่าเป็น 12 บิต (ค่า 0-4095)           |
-|                                                                                         |
-| def read_lux_estimate(raw_value):                                                       |
-|     # ฟังก์ชันแปลงค่าดิบจาก ADC (0-4095) เป็นค่าประมาณความเข้มแสงเป็นเปอร์เซ็นต์ (0-100%)           |
-|     # ค่ายิ่งสูง หมายถึง แรงดันที่จุด Vout ยิ่งสูง ซึ่งเกิดจากความต้านทานของ LDR ยิ่งต่ำ (แสงยิ่งจ้า)         |
-|     percent = (raw_value / 4095) \* 100                                                 |
-|     return round(percent, 2)                                                            |
-|                                                                                         |
-| while True: \# วนซ้ำอ่านค่าตลอดเวลา                                                        |
-|     raw = ldr_pin.read() \# อ่านค่าดิบจากขา ADC (0-4095)                                   |
-|     voltage = (raw / 4095) \* 3.3 \# แปลงค่าดิบเป็นแรงดันไฟฟ้าจริง (หน่วยโวลต์)                 |
-|     light_percent = read_lux_estimate(raw) \# แปลงเป็นค่าความเข้มแสงโดยประมาณ (%)          |
-|                                                                                         |
-|     # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้     |
-|     print("Voltage:{:.2f},Light:{:.2f}".format(voltage, light_percent))                 |
-|                                                                                         |
-|     time.sleep(0.5) \# หน่วงเวลา 0.5 วินาทีก่อนอ่านค่ารอบถัดไป                                 |
+```python
+# main.py — ESP32 MicroPython: อ่านค่าความเข้มแสงจาก LDR และส่งออกทาง Serial
+# สำหรับแสดงผลบน Dashboard ของ VS Code (Serial Plotter Extension)
+
+from machine import Pin, ADC   # นำเข้าโมดูลควบคุมขา GPIO และตัวแปลงสัญญาณอนาล็อกเป็นดิจิทัล (ADC)
+import time                     # นำเข้าโมดูลสำหรับหน่วงเวลา
+
+ldr_pin = ADC(Pin(34))          # กำหนดให้ขา GPIO34 ทำงานเป็นอินพุต ADC (ต่อกับจุด Vout ของวงจร LDR)
+ldr_pin.atten(ADC.ATTN_11DB)    # ตั้งค่าช่วงการวัดแรงดันของ ADC ให้ครอบคลุม 0-3.3V
+ldr_pin.width(ADC.WIDTH_12BIT)  # ตั้งค่าความละเอียดการอ่านค่าเป็น 12 บิต (ค่า 0-4095)
+
+def read_lux_estimate(raw_value):
+    # ฟังก์ชันแปลงค่าดิบจาก ADC (0-4095) เป็นค่าประมาณความเข้มแสงเป็นเปอร์เซ็นต์ (0-100%)
+    # ค่ายิ่งสูง หมายถึง แรงดันที่จุด Vout ยิ่งสูง ซึ่งเกิดจากความต้านทานของ LDR ยิ่งต่ำ (แสงยิ่งจ้า)
+    percent = (raw_value / 4095) * 100
+    return round(percent, 2)
+
+while True:                      # วนซ้ำอ่านค่าตลอดเวลา
+    raw = ldr_pin.read()          # อ่านค่าดิบจากขา ADC (0-4095)
+    voltage = (raw / 4095) * 3.3  # แปลงค่าดิบเป็นแรงดันไฟฟ้าจริง (หน่วยโวลต์)
+    light_percent = read_lux_estimate(raw)  # แปลงเป็นค่าความเข้มแสงโดยประมาณ (%)
+
+    # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้
+    print("Voltage:{:.2f},Light:{:.2f}".format(voltage, light_percent))
+
+    time.sleep(0.5)               # หน่วงเวลา 0.5 วินาทีก่อนอ่านค่ารอบถัดไป
+```
 
 1\. เปิดโปรแกรม Visual Studio Code แล้วติดตั้งส่วนขยาย 'MicroPico' (หรือ 'Pymakr') จาก Extensions Marketplace เพื่อเชื่อมต่อและอัปโหลดโค้ดไปยัง ESP32
 

@@ -155,42 +155,43 @@
 
 ตารางที่ 7.3 โค้ดภาษา MicroPython สำหรับการตรวจวัดความเข้มข้นแก๊สด้วยเซนเซอร์ MQ-2
 
-| from machine import Pin, ADC                                                             |
-|------------------------------------------------------------------------------------------|
-| import time                                                                              |
-|                                                                                          |
-| \# ตั้งค่าขา ADC สำหรับอ่านค่าแรงดันจากเซนเซอร์แก๊ส MQ-2                                          |
-| gas_adc = ADC(Pin(34)) \# ใช้ GPIO34 (ADC1_CH6) รับสัญญาณอนาล็อกจาก MQ-2                     |
-| gas_adc.atten(ADC.ATTN_11DB) \# ตั้งช่วงแรงดันอินพุตเป็น 0-3.3V                                 |
-| gas_adc.width(ADC.WIDTH_12BIT) \# ความละเอียด ADC 12 บิต (0-4095)                          |
-|                                                                                          |
-| RL = 5.0 \# ค่าความต้านทานโหลด (Load Resistance) บนบอร์ดโมดูล MQ-2 หน่วยกิโลโอห์ม               |
-| RO = 10.0 \# ค่าความต้านทานอ้างอิงในอากาศบริสุทธิ์ (ปรับเทียบจากการอุ่นเครื่องล่วงหน้า) หน่วยกิโลโอห์ม      |
-| THRESHOLD_RATIO = 0.4 \# เกณฑ์ Rs/Ro ที่ถือว่าตรวจพบแก๊สผิดปกติ (ค่ายิ่งต่ำยิ่งแสดงว่าแก๊สยิ่งเข้มข้น)       |
-|                                                                                          |
-| def read_voltage():                                                                      |
-|     raw = gas_adc.read() \# อ่านค่าดิบจาก ADC (0-4095)                                      |
-|     voltage = raw / 4095.0 \* 3.3 \# แปลงค่าดิบเป็นแรงดันไฟฟ้า (0-3.3V)                       |
-|     return voltage                                                                       |
-|                                                                                          |
-| def calc_rs(voltage):                                                                    |
-|     if voltage \<= 0.01:                                                                 |
-|         voltage = 0.01 \# ป้องกันการหารด้วยศูนย์                                              |
-|     rs = (3.3 - voltage) / voltage \* RL \# คำนวณความต้านทานเซนเซอร์ Rs จากวงจรแบ่งแรงดัน    |
-|     return rs                                                                            |
-|                                                                                          |
-| print("เริ่มอุ่นเครื่องเซนเซอร์ MQ-2 (Preheat)...")                                             |
-| time.sleep(60) \# อุ่นเครื่องอย่างน้อย 1 นาทีก่อนเริ่มอ่านค่าจริง                                     |
-| print("อุ่นเครื่องเสร็จสิ้น เริ่มอ่านค่าความเข้มข้นแก๊ส")                                              |
-|                                                                                          |
-| while True:                                                                              |
-|     v = read_voltage()                                                                   |
-|     rs = calc_rs(v)                                                                      |
-|     ratio = rs / RO \# อัตราส่วน Rs/Ro ใช้เทียบกับกราฟคุณลักษณะเฉพาะของ MQ-2                    |
-|     alert = "ตรวจพบแก๊ส!" if ratio \< THRESHOLD_RATIO else "ปกติ"                          |
-|     # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้      |
-|     print("Voltage:{:.3f} Rs:{:.2f} Ratio:{:.2f} Status:{}".format(v, rs, ratio, alert)) |
-|     time.sleep(1)                                                                        |
+```python
+from machine import Pin, ADC
+import time
+
+# ตั้งค่าขา ADC สำหรับอ่านค่าแรงดันจากเซนเซอร์แก๊ส MQ-2
+gas_adc = ADC(Pin(34))          # ใช้ GPIO34 (ADC1_CH6) รับสัญญาณอนาล็อกจาก MQ-2
+gas_adc.atten(ADC.ATTN_11DB)    # ตั้งช่วงแรงดันอินพุตเป็น 0-3.3V
+gas_adc.width(ADC.WIDTH_12BIT)  # ความละเอียด ADC 12 บิต (0-4095)
+
+RL = 5.0            # ค่าความต้านทานโหลด (Load Resistance) บนบอร์ดโมดูล MQ-2 หน่วยกิโลโอห์ม
+RO = 10.0           # ค่าความต้านทานอ้างอิงในอากาศบริสุทธิ์ (ปรับเทียบจากการอุ่นเครื่องล่วงหน้า) หน่วยกิโลโอห์ม
+THRESHOLD_RATIO = 0.4   # เกณฑ์ Rs/Ro ที่ถือว่าตรวจพบแก๊สผิดปกติ (ค่ายิ่งต่ำยิ่งแสดงว่าแก๊สยิ่งเข้มข้น)
+
+def read_voltage():
+    raw = gas_adc.read()                    # อ่านค่าดิบจาก ADC (0-4095)
+    voltage = raw / 4095.0 * 3.3            # แปลงค่าดิบเป็นแรงดันไฟฟ้า (0-3.3V)
+    return voltage
+
+def calc_rs(voltage):
+    if voltage <= 0.01:
+        voltage = 0.01                      # ป้องกันการหารด้วยศูนย์
+    rs = (3.3 - voltage) / voltage * RL      # คำนวณความต้านทานเซนเซอร์ Rs จากวงจรแบ่งแรงดัน
+    return rs
+
+print("เริ่มอุ่นเครื่องเซนเซอร์ MQ-2 (Preheat)...")
+time.sleep(60)   # อุ่นเครื่องอย่างน้อย 1 นาทีก่อนเริ่มอ่านค่าจริง
+print("อุ่นเครื่องเสร็จสิ้น เริ่มอ่านค่าความเข้มข้นแก๊ส")
+
+while True:
+    v = read_voltage()
+    rs = calc_rs(v)
+    ratio = rs / RO                          # อัตราส่วน Rs/Ro ใช้เทียบกับกราฟคุณลักษณะเฉพาะของ MQ-2
+    alert = "ตรวจพบแก๊ส!" if ratio < THRESHOLD_RATIO else "ปกติ"
+    # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้
+    print("Voltage:{:.3f} Rs:{:.2f} Ratio:{:.2f} Status:{}".format(v, rs, ratio, alert))
+    time.sleep(1)
+```
 
 1\. เปิดโปรแกรม Visual Studio Code แล้วติดตั้งส่วนขยาย 'MicroPico' (หรือ 'Pymakr') จาก Extensions Marketplace เพื่อเชื่อมต่อและอัปโหลดโค้ดไปยัง ESP32
 

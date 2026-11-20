@@ -166,50 +166,51 @@ RTD (Resistance Temperature Detector) เป็นเซนเซอร์วั
 
 ตารางที่ 2.4 โค้ดภาษา MicroPython สำหรับชุดทดลองวัดอุณหภูมิหลายจุด (Quad Thermocouple) ร่วมกับเซนเซอร์ SHT30 และ DHT11
 
-| from machine import Pin, I2C                               |
-|------------------------------------------------------------|
-| import time, dht                                           |
-|                                                            |
-| class MAX6675:                                             |
-| def \_\_init\_\_(self, sck, cs, so):                       |
-| self.sck = Pin(sck, Pin.OUT, value=0)                      |
-| self.cs = Pin(cs, Pin.OUT, value=1)                        |
-| self.so = Pin(so, Pin.IN)                                  |
-|                                                            |
-| def read_c(self):                                          |
-| self.cs.value(0)                                           |
-| time.sleep_ms(1)                                           |
-| v = 0                                                      |
-| for \_ in range(16):                                       |
-| self.sck.value(0)                                          |
-| time.sleep_us(2)                                           |
-| v = (v \<\< 1) \| self.so.value()                          |
-| self.sck.value(1)                                          |
-| time.sleep_us(2)                                           |
-| self.cs.value(1)                                           |
-| \# บิต D2 = 1 หมายถึงสายเทอร์โมคัปเปิลหลุด                       |
-| if v & 0x04:                                               |
-| return None                                                |
-| return (v \>\> 3) \* 0.25                                  |
-|                                                            |
-| tc = \[MAX6675(18, 5, 19), MAX6675(14, 27, 13),            |
-| MAX6675(25, 32, 26), MAX6675(33, 4, 23)\]                  |
-| i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=100000)        |
-|                                                            |
-| def read_sht30():                                          |
-| \# single shot, high repeatability                         |
-| i2c.writeto(0x44, b"\x24\x00")                             |
-| time.sleep_ms(20)                                          |
-| d = i2c.readfrom(0x44, 6)                                  |
-| t = -45 + 175 \* ((d\[0\] \<\< 8) \| d\[1\]) / 65535       |
-| h = 100 \* ((d\[3\] \<\< 8) \| d\[4\]) / 65535             |
-| return t, h                                                |
-|                                                            |
-| while True:                                                |
-| temps = \[c.read_c() for c in tc\]                         |
-| t, h = read_sht30()                                        |
-| print("TC1-4:", temps, "SHT30: %.1f C %.1f %%RH" % (t, h)) |
-| time.sleep_ms(1000)                                        |
+```python
+from machine import Pin, I2C
+import time, dht
+
+class MAX6675:
+    def __init__(self, sck, cs, so):
+        self.sck = Pin(sck, Pin.OUT, value=0)
+        self.cs = Pin(cs, Pin.OUT, value=1)
+        self.so = Pin(so, Pin.IN)
+
+    def read_c(self):
+        self.cs.value(0)
+        time.sleep_ms(1)
+        v = 0
+        for _ in range(16):
+            self.sck.value(0)
+            time.sleep_us(2)
+            v = (v << 1) | self.so.value()
+            self.sck.value(1)
+            time.sleep_us(2)
+        self.cs.value(1)
+        # บิต D2 = 1 หมายถึงสายเทอร์โมคัปเปิลหลุด
+        if v & 0x04:
+            return None
+        return (v >> 3) * 0.25
+
+tc = [MAX6675(18, 5, 19), MAX6675(14, 27, 13),
+      MAX6675(25, 32, 26), MAX6675(33, 4, 23)]
+i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=100000)
+
+def read_sht30():
+    # single shot, high repeatability
+    i2c.writeto(0x44, b"\x24\x00")
+    time.sleep_ms(20)
+    d = i2c.readfrom(0x44, 6)
+    t = -45 + 175 * ((d[0] << 8) | d[1]) / 65535
+    h = 100 * ((d[3] << 8) | d[4]) / 65535
+    return t, h
+
+while True:
+    temps = [c.read_c() for c in tc]
+    t, h = read_sht30()
+    print("TC1-4:", temps, "SHT30: %.1f C  %.1f %%RH" % (t, h))
+    time.sleep_ms(1000)
+```
 
 1\. จุ่มเซนเซอร์ทั้งสามชนิดพร้อมเทอร์โมมิเตอร์อ้างอิงลงในบีกเกอร์น้ำที่อุณหภูมิห้อง บันทึกค่าที่อ่านได้จากทุกเซนเซอร์
 

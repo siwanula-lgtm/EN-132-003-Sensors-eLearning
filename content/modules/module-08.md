@@ -101,37 +101,38 @@
 
 ตารางที่ 8.1 โค้ดภาษา MicroPython สำหรับการขยายสัญญาณจากเซนเซอร์ LDR ด้วยวงจรขยายแบบไม่กลับเฟส
 
-| from machine import Pin, ADC                                                                  |
-|-----------------------------------------------------------------------------------------------|
-| import time                                                                                   |
-|                                                                                               |
-| \# ขา ADC สำหรับอ่านสัญญาณดิบจากวงจรแบ่งแรงดัน LDR (ก่อนขยาย)                                        |
-| raw_adc = ADC(Pin(35)) \# GPIO35 (ADC1_CH7)                                                   |
-| raw_adc.atten(ADC.ATTN_11DB) \# ตั้งช่วงแรงดันอินพุตเป็น 0-3.3V                                      |
-| raw_adc.width(ADC.WIDTH_12BIT) \# ความละเอียด ADC 12 บิต (0-4095)                               |
-|                                                                                               |
-| \# ขา ADC สำหรับอ่านสัญญาณหลังผ่านวงจร Non-inverting Amplifier แล้ว                                 |
-| amp_adc = ADC(Pin(34)) \# GPIO34 (ADC1_CH6)                                                   |
-| amp_adc.atten(ADC.ATTN_11DB)                                                                  |
-| amp_adc.width(ADC.WIDTH_12BIT)                                                                |
-|                                                                                               |
-| RF = 20.0 \# ค่าตัวต้านทานป้อนกลับ (Feedback Resistor) หน่วยกิโลโอห์ม                                 |
-| R1 = 10.0 \# ค่าตัวต้านทานอ้างอิงกราวด์ หน่วยกิโลโอห์ม                                                 |
-| GAIN_THEORY = 1 + (RF / R1) \# อัตราขยายทางทฤษฎีของวงจร Non-inverting Amplifier: Av = 1 + Rf/R1 |
-|                                                                                               |
-| def read_voltage(adc):                                                                        |
-|     raw = adc.read() \# อ่านค่าดิบจาก ADC (0-4095)                                               |
-|     return raw / 4095.0 \* 3.3 \# แปลงค่าดิบเป็นแรงดันไฟฟ้า (0-3.3V)                               |
-|                                                                                               |
-| print("อัตราขยายทางทฤษฎี Av = 1 + Rf/R1 = {:.2f} เท่า".format(GAIN_THEORY))                      |
-|                                                                                               |
-| while True:                                                                                   |
-|     v_raw = read_voltage(raw_adc)                                                             |
-|     v_amp = read_voltage(amp_adc)                                                             |
-|     gain_actual = (v_amp / v_raw) if v_raw \> 0.02 else 0.0 \# ป้องกันการหารด้วยศูนย์              |
-|     # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟเปรียบเทียบได้  |
-|     print("Raw:{:.3f} Amplified:{:.3f} Gain:{:.2f}".format(v_raw, v_amp, gain_actual))        |
-|     time.sleep(0.5)                                                                           |
+```python
+from machine import Pin, ADC
+import time
+
+# ขา ADC สำหรับอ่านสัญญาณดิบจากวงจรแบ่งแรงดัน LDR (ก่อนขยาย)
+raw_adc = ADC(Pin(35))          # GPIO35 (ADC1_CH7)
+raw_adc.atten(ADC.ATTN_11DB)    # ตั้งช่วงแรงดันอินพุตเป็น 0-3.3V
+raw_adc.width(ADC.WIDTH_12BIT)  # ความละเอียด ADC 12 บิต (0-4095)
+
+# ขา ADC สำหรับอ่านสัญญาณหลังผ่านวงจร Non-inverting Amplifier แล้ว
+amp_adc = ADC(Pin(34))          # GPIO34 (ADC1_CH6)
+amp_adc.atten(ADC.ATTN_11DB)
+amp_adc.width(ADC.WIDTH_12BIT)
+
+RF = 20.0   # ค่าตัวต้านทานป้อนกลับ (Feedback Resistor) หน่วยกิโลโอห์ม
+R1 = 10.0   # ค่าตัวต้านทานอ้างอิงกราวด์ หน่วยกิโลโอห์ม
+GAIN_THEORY = 1 + (RF / R1)   # อัตราขยายทางทฤษฎีของวงจร Non-inverting Amplifier: Av = 1 + Rf/R1
+
+def read_voltage(adc):
+    raw = adc.read()                    # อ่านค่าดิบจาก ADC (0-4095)
+    return raw / 4095.0 * 3.3           # แปลงค่าดิบเป็นแรงดันไฟฟ้า (0-3.3V)
+
+print("อัตราขยายทางทฤษฎี Av = 1 + Rf/R1 = {:.2f} เท่า".format(GAIN_THEORY))
+
+while True:
+    v_raw = read_voltage(raw_adc)
+    v_amp = read_voltage(amp_adc)
+    gain_actual = (v_amp / v_raw) if v_raw > 0.02 else 0.0   # ป้องกันการหารด้วยศูนย์
+    # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟเปรียบเทียบได้
+    print("Raw:{:.3f} Amplified:{:.3f} Gain:{:.2f}".format(v_raw, v_amp, gain_actual))
+    time.sleep(0.5)
+```
 
 1\. เปิดโปรแกรม Visual Studio Code แล้วติดตั้งส่วนขยาย 'MicroPico' (หรือ 'Pymakr') จาก Extensions Marketplace เพื่อเชื่อมต่อและอัปโหลดโค้ดไปยัง ESP32
 

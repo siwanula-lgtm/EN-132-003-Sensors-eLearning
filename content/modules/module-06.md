@@ -152,36 +152,37 @@
 
 ตารางที่ 6.4 โค้ดภาษา MicroPython สำหรับการวัดอัตราการไหลของน้ำด้วยเซนเซอร์ YF-S201
 
-| \# main.py — ESP32 MicroPython: นับพัลส์จากเซนเซอร์ YF-S201 เพื่อคำนวณอัตราการไหลของน้ำ             |
-|---------------------------------------------------------------------------------------------|
-| \# และส่งออกทาง Serial สำหรับแสดงผลบน Dashboard ของ VS Code (Serial Plotter Extension)        |
-|                                                                                             |
-| from machine import Pin \# นำเข้าโมดูลควบคุมขา GPIO                                            |
-| import time \# นำเข้าโมดูลสำหรับหน่วงเวลา                                                       |
-|                                                                                             |
-| FLOW_PIN = 5 \# ขาสัญญาณ (Signal) ของเซนเซอร์ YF-S201 ต่อกับ GPIO5                              |
-| CALIBRATION_FACTOR = 7.5 \# ค่าคาลิเบรชันของ YF-S201 (พัลส์ต่อวินาที ต่อ 1 L/min)                    |
-|                                                                                             |
-| pulse_count = 0 \# ตัวแปรเก็บจำนวนพัลส์ที่นับได้ (แก้ไขในฟังก์ชันอินเตอร์รัพต์)                             |
-|                                                                                             |
-| def pulse_handler(pin):                                                                     |
-|     # ฟังก์ชันอินเตอร์รัพต์ ถูกเรียกทุกครั้งที่มีพัลส์ขาขึ้นจากเซนเซอร์                                         |
-|     global pulse_count                                                                      |
-|     pulse_count += 1                                                                        |
-|                                                                                             |
-| flow_pin = Pin(FLOW_PIN, Pin.IN, Pin.PULL_UP)                                               |
-| flow_pin.irq(trigger=Pin.IRQ_RISING, handler=pulse_handler) \# ตั้งอินเตอร์รัพต์ที่ขาขึ้นของสัญญาณ     |
-|                                                                                             |
-| total_liters = 0.0 \# ตัวแปรสะสมปริมาณน้ำรวม (ลิตร)                                             |
-|                                                                                             |
-| while True:                                                                                 |
-|     pulse_count = 0 \# เคลียร์ตัวนับก่อนเริ่มหน้าต่างเวลาการวัดใหม่                                    |
-|     time.sleep(1) \# นับพัลส์เป็นเวลา 1 วินาที                                                    |
-|     pulses = pulse_count \# อ่านจำนวนพัลส์ที่นับได้ในช่วง 1 วินาที                                    |
-|     flow_rate_lmin = pulses / CALIBRATION_FACTOR \# แปลงความถี่พัลส์ (Hz) เป็นอัตราการไหล (L/min) |
-|     total_liters += flow_rate_lmin / 60.0 \# สะสมปริมาณน้ำที่ไหลผ่านในช่วง 1 วินาทีนี้                |
-|     # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้         |
-|     print("Flow:{:.2f} Total:{:.2f}".format(flow_rate_lmin, total_liters))                  |
+```python
+# main.py — ESP32 MicroPython: นับพัลส์จากเซนเซอร์ YF-S201 เพื่อคำนวณอัตราการไหลของน้ำ
+# และส่งออกทาง Serial สำหรับแสดงผลบน Dashboard ของ VS Code (Serial Plotter Extension)
+
+from machine import Pin   # นำเข้าโมดูลควบคุมขา GPIO
+import time                # นำเข้าโมดูลสำหรับหน่วงเวลา
+
+FLOW_PIN = 5               # ขาสัญญาณ (Signal) ของเซนเซอร์ YF-S201 ต่อกับ GPIO5
+CALIBRATION_FACTOR = 7.5   # ค่าคาลิเบรชันของ YF-S201 (พัลส์ต่อวินาที ต่อ 1 L/min)
+
+pulse_count = 0            # ตัวแปรเก็บจำนวนพัลส์ที่นับได้ (แก้ไขในฟังก์ชันอินเตอร์รัพต์)
+
+def pulse_handler(pin):
+    # ฟังก์ชันอินเตอร์รัพต์ ถูกเรียกทุกครั้งที่มีพัลส์ขาขึ้นจากเซนเซอร์
+    global pulse_count
+    pulse_count += 1
+
+flow_pin = Pin(FLOW_PIN, Pin.IN, Pin.PULL_UP)
+flow_pin.irq(trigger=Pin.IRQ_RISING, handler=pulse_handler)   # ตั้งอินเตอร์รัพต์ที่ขาขึ้นของสัญญาณ
+
+total_liters = 0.0         # ตัวแปรสะสมปริมาณน้ำรวม (ลิตร)
+
+while True:
+    pulse_count = 0                     # เคลียร์ตัวนับก่อนเริ่มหน้าต่างเวลาการวัดใหม่
+    time.sleep(1)                       # นับพัลส์เป็นเวลา 1 วินาที
+    pulses = pulse_count                # อ่านจำนวนพัลส์ที่นับได้ในช่วง 1 วินาที
+    flow_rate_lmin = pulses / CALIBRATION_FACTOR   # แปลงความถี่พัลส์ (Hz) เป็นอัตราการไหล (L/min)
+    total_liters += flow_rate_lmin / 60.0          # สะสมปริมาณน้ำที่ไหลผ่านในช่วง 1 วินาทีนี้
+    # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้
+    print("Flow:{:.2f} Total:{:.2f}".format(flow_rate_lmin, total_liters))
+```
 
 1\. เปิดโปรแกรม Visual Studio Code แล้วติดตั้งส่วนขยาย 'MicroPico' (หรือ 'Pymakr') จาก Extensions Marketplace เพื่อเชื่อมต่อและอัปโหลดโค้ดไปยัง ESP32
 

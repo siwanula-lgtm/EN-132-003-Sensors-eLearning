@@ -201,81 +201,82 @@
 
 ตารางที่ 10.3 โค้ดภาษา MicroPython สำหรับระบบสาธิตการบำรุงรักษาเชิงพยากรณ์ด้วย ESP32
 
-| import time                                                                                   |
-|-----------------------------------------------------------------------------------------------|
-| import ujson                                                                                  |
-| from machine import Pin                                                                       |
-| import onewire, ds18x20                                                                       |
-|                                                                                               |
-| \# ---------- ตั้งค่าเซนเซอร์สั่นสะเทือน SW-420 (นับพัลส์ด้วยการขัดจังหวะ) ----------                      |
-| vibration_pin = Pin(27, Pin.IN, Pin.PULL_DOWN)                                                |
-| vibration_count = 0                                                                           |
-|                                                                                               |
-| def vibration_isr(pin):                                                                       |
-|     global vibration_count                                                                    |
-|     vibration_count += 1                                                                      |
-|                                                                                               |
-| vibration_pin.irq(trigger=Pin.IRQ_RISING, handler=vibration_isr)                              |
-|                                                                                               |
-| \# ---------- ตั้งค่าเซนเซอร์อุณหภูมิ DS18B20 (โปรโตคอล OneWire) ----------                          |
-| ow = onewire.OneWire(Pin(4))                                                                  |
-| ds_sensor = ds18x20.DS18X20(ow)                                                               |
-| roms = ds_sensor.scan() \# ค้นหาที่อยู่ (ROM) ของเซนเซอร์ DS18B20 ที่ต่ออยู่บนบัส                         |
-|                                                                                               |
-| \# ---------- เกณฑ์การจำแนกสถานะเครื่องจักร (ปรับได้ตามลักษณะเครื่องจักรจริง) ----------                 |
-| VIBRATION_WARNING_HZ = 5.0                                                                    |
-| VIBRATION_ALARM_HZ = 10.0                                                                     |
-| TEMP_WARNING_C = 45.0                                                                         |
-| TEMP_ALARM_C = 60.0                                                                           |
-|                                                                                               |
-| WINDOW_MS = 1000 \# หน้าต่างเวลาสำหรับคำนวณความถี่การสั่นสะเทือน (1 วินาที)                             |
-| TEMP_INTERVAL_MS = 2000 \# อ่านค่าอุณหภูมิทุก 2 วินาที (DS18B20 ใช้เวลาแปลงค่า)                         |
-|                                                                                               |
-| last_window_start = time.ticks_ms()                                                           |
-| last_temp_read = time.ticks_ms()                                                              |
-| temperature_c = None                                                                          |
-|                                                                                               |
-|                                                                                               |
-| def classify_status(vib_hz, temp_c):                                                          |
-|     if vib_hz \>= VIBRATION_ALARM_HZ or (temp_c is not None and temp_c \>= TEMP_ALARM_C):     |
-|         return "ALARM"                                                                        |
-|     if vib_hz \>= VIBRATION_WARNING_HZ or (temp_c is not None and temp_c \>= TEMP_WARNING_C): |
-|         return "WARNING"                                                                      |
-|     return "NORMAL"                                                                           |
-|                                                                                               |
-|                                                                                               |
-| print("เริ่มระบบสาธิต Predictive Maintenance (กด Ctrl+C เพื่อหยุด)")                                |
-| if roms:                                                                                      |
-|     ds_sensor.convert_temp() \# เริ่มการแปลงค่าอุณหภูมิครั้งแรก                                       |
-|                                                                                               |
-| while True:                                                                                   |
-|     now = time.ticks_ms()                                                                     |
-|                                                                                               |
-|     # อ่านค่าอุณหภูมิทุก 2 วินาที (ให้เวลา DS18B20 แปลงค่าให้เสร็จก่อน)                                    |
-|     if time.ticks_diff(now, last_temp_read) \>= TEMP_INTERVAL_MS:                             |
-|         if roms:                                                                              |
-|             try:                                                                              |
-|                 temperature_c = ds_sensor.read_temp(roms\[0\])                                |
-|             except OSError:                                                                   |
-|                 pass \# อ่านค่าไม่สำเร็จในรอบนี้ ใช้ค่าล่าสุดที่มีอยู่แทน                                    |
-|             ds_sensor.convert_temp() \# สั่งแปลงค่ารอบถัดไปล่วงหน้า                                 |
-|         last_temp_read = now                                                                  |
-|                                                                                               |
-|     # คำนวณความถี่การสั่นสะเทือน (Hz) ทุกหน้าต่างเวลา 1 วินาที แบบไม่บล็อก                                |
-|     if time.ticks_diff(now, last_window_start) \>= WINDOW_MS:                                 |
-|         vibration_hz = vibration_count / (WINDOW_MS / 1000)                                   |
-|         vibration_count = 0                                                                   |
-|         last_window_start = now                                                               |
-|                                                                                               |
-|         status = classify_status(vibration_hz, temperature_c)                                 |
-|         payload = ujson.dumps({                                                               |
-|             "vibration_hz": round(vibration_hz, 2),                                           |
-|             "temperature_c": temperature_c,                                                   |
-|             "status": status,                                                                 |
-|         })                                                                                    |
-|         print(payload)                                                                        |
-|                                                                                               |
-|     time.sleep(0.05)                                                                          |
+```python
+import time
+import ujson
+from machine import Pin
+import onewire, ds18x20
+
+# ---------- ตั้งค่าเซนเซอร์สั่นสะเทือน SW-420 (นับพัลส์ด้วยการขัดจังหวะ) ----------
+vibration_pin = Pin(27, Pin.IN, Pin.PULL_DOWN)
+vibration_count = 0
+
+def vibration_isr(pin):
+    global vibration_count
+    vibration_count += 1
+
+vibration_pin.irq(trigger=Pin.IRQ_RISING, handler=vibration_isr)
+
+# ---------- ตั้งค่าเซนเซอร์อุณหภูมิ DS18B20 (โปรโตคอล OneWire) ----------
+ow = onewire.OneWire(Pin(4))
+ds_sensor = ds18x20.DS18X20(ow)
+roms = ds_sensor.scan()   # ค้นหาที่อยู่ (ROM) ของเซนเซอร์ DS18B20 ที่ต่ออยู่บนบัส
+
+# ---------- เกณฑ์การจำแนกสถานะเครื่องจักร (ปรับได้ตามลักษณะเครื่องจักรจริง) ----------
+VIBRATION_WARNING_HZ = 5.0
+VIBRATION_ALARM_HZ = 10.0
+TEMP_WARNING_C = 45.0
+TEMP_ALARM_C = 60.0
+
+WINDOW_MS = 1000          # หน้าต่างเวลาสำหรับคำนวณความถี่การสั่นสะเทือน (1 วินาที)
+TEMP_INTERVAL_MS = 2000   # อ่านค่าอุณหภูมิทุก 2 วินาที (DS18B20 ใช้เวลาแปลงค่า)
+
+last_window_start = time.ticks_ms()
+last_temp_read = time.ticks_ms()
+temperature_c = None
+
+
+def classify_status(vib_hz, temp_c):
+    if vib_hz >= VIBRATION_ALARM_HZ or (temp_c is not None and temp_c >= TEMP_ALARM_C):
+        return "ALARM"
+    if vib_hz >= VIBRATION_WARNING_HZ or (temp_c is not None and temp_c >= TEMP_WARNING_C):
+        return "WARNING"
+    return "NORMAL"
+
+
+print("เริ่มระบบสาธิต Predictive Maintenance (กด Ctrl+C เพื่อหยุด)")
+if roms:
+    ds_sensor.convert_temp()   # เริ่มการแปลงค่าอุณหภูมิครั้งแรก
+
+while True:
+    now = time.ticks_ms()
+
+    # อ่านค่าอุณหภูมิทุก 2 วินาที (ให้เวลา DS18B20 แปลงค่าให้เสร็จก่อน)
+    if time.ticks_diff(now, last_temp_read) >= TEMP_INTERVAL_MS:
+        if roms:
+            try:
+                temperature_c = ds_sensor.read_temp(roms[0])
+            except OSError:
+                pass   # อ่านค่าไม่สำเร็จในรอบนี้ ใช้ค่าล่าสุดที่มีอยู่แทน
+            ds_sensor.convert_temp()   # สั่งแปลงค่ารอบถัดไปล่วงหน้า
+        last_temp_read = now
+
+    # คำนวณความถี่การสั่นสะเทือน (Hz) ทุกหน้าต่างเวลา 1 วินาที แบบไม่บล็อก
+    if time.ticks_diff(now, last_window_start) >= WINDOW_MS:
+        vibration_hz = vibration_count / (WINDOW_MS / 1000)
+        vibration_count = 0
+        last_window_start = now
+
+        status = classify_status(vibration_hz, temperature_c)
+        payload = ujson.dumps({
+            "vibration_hz": round(vibration_hz, 2),
+            "temperature_c": temperature_c,
+            "status": status,
+        })
+        print(payload)
+
+    time.sleep(0.05)
+```
 
 1\. เปิด VS Code ติดตั้งส่วนขยาย 'MicroPico' เชื่อมต่อ ESP32 แล้วอัปโหลดไฟล์ main.py (โค้ดตามตารางที่ 10.3) ไปยังบอร์ด
 

@@ -216,46 +216,47 @@ MQTT (Message Queuing Telemetry Transport) เป็นโปรโตคอล�
 
 ตารางที่ 9.3 โค้ดภาษา MicroPython สำหรับการรับส่งข้อมูลเซนเซอร์ BME280 ผ่านโปรโตคอล MQTT
 
-| import network, time, ujson                                                                 |
-|---------------------------------------------------------------------------------------------|
-| from umqtt.simple import MQTTClient                                                         |
-| from machine import Pin, I2C                                                                |
-| import bme280 \# ไลบรารีไดรเวอร์ BME280 สำหรับ MicroPython (อัปโหลดไฟล์ bme280.py ไปยังบอร์ดก่อนรัน) |
-|                                                                                             |
-| WIFI_SSID = "ชื่อ WiFi ของคุณ"                                                                 |
-| WIFI_PASSWORD = "รหัสผ่าน WiFi ของคุณ"                                                         |
-| MQTT_BROKER = "broker.hivemq.com" \# Public MQTT Broker สำหรับการเรียนการสอน (ไม่ต้องสมัครบัญชี)   |
-| MQTT_TOPIC = b"ksu/en132003/room1/environment"                                              |
-| CLIENT_ID = "esp32-unit9-lab"                                                               |
-|                                                                                             |
-| \# เชื่อมต่อเครือข่าย WiFi                                                                       |
-| wifi = network.WLAN(network.STA_IF)                                                         |
-| wifi.active(True)                                                                           |
-| wifi.connect(WIFI_SSID, WIFI_PASSWORD)                                                      |
-| print("กำลังเชื่อมต่อ WiFi...")                                                                 |
-| while not wifi.isconnected():                                                               |
-|     time.sleep(0.5)                                                                         |
-| print("เชื่อมต่อ WiFi สำเร็จ, IP:", wifi.ifconfig()\[0\])                                       |
-|                                                                                             |
-| \# ตั้งค่าบัส I2C และเซนเซอร์ BME280                                                             |
-| i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=100000)                                         |
-| sensor = bme280.BME280(i2c=i2c)                                                             |
-|                                                                                             |
-| \# เชื่อมต่อ MQTT Broker                                                                       |
-| client = MQTTClient(CLIENT_ID, MQTT_BROKER)                                                 |
-| client.connect()                                                                            |
-| print("เชื่อมต่อ MQTT Broker สำเร็จ:", MQTT_BROKER)                                             |
-|                                                                                             |
-| while True:                                                                                 |
-|     temp, pressure, humidity = sensor.read_compensated_data() \# อ่านค่าที่ชดเชยแล้วจากเซนเซอร์   |
-|     payload = ujson.dumps({                                                                 |
-|         "temperature_c": round(temp / 100, 2), \# หน่วยองศาเซลเซียส                           |
-|         "pressure_hpa": round(pressure / 25600, 2), \# หน่วยเฮกโตปาสคาล                      |
-|         "humidity_percent": round(humidity / 1024, 2), \# หน่วยเปอร์เซ็นต์                      |
-|     })                                                                                      |
-|     client.publish(MQTT_TOPIC, payload) \# ส่งข้อมูล (Publish) ไปยัง Topic บน Broker            |
-|     print("Published:", payload)                                                            |
-|     time.sleep(5)                                                                           |
+```python
+import network, time, ujson
+from umqtt.simple import MQTTClient
+from machine import Pin, I2C
+import bme280   # ไลบรารีไดรเวอร์ BME280 สำหรับ MicroPython (อัปโหลดไฟล์ bme280.py ไปยังบอร์ดก่อนรัน)
+
+WIFI_SSID = "ชื่อ WiFi ของคุณ"
+WIFI_PASSWORD = "รหัสผ่าน WiFi ของคุณ"
+MQTT_BROKER = "broker.hivemq.com"          # Public MQTT Broker สำหรับการเรียนการสอน (ไม่ต้องสมัครบัญชี)
+MQTT_TOPIC = b"ksu/en132003/room1/environment"
+CLIENT_ID = "esp32-unit9-lab"
+
+# เชื่อมต่อเครือข่าย WiFi
+wifi = network.WLAN(network.STA_IF)
+wifi.active(True)
+wifi.connect(WIFI_SSID, WIFI_PASSWORD)
+print("กำลังเชื่อมต่อ WiFi...")
+while not wifi.isconnected():
+    time.sleep(0.5)
+print("เชื่อมต่อ WiFi สำเร็จ, IP:", wifi.ifconfig()[0])
+
+# ตั้งค่าบัส I2C และเซนเซอร์ BME280
+i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=100000)
+sensor = bme280.BME280(i2c=i2c)
+
+# เชื่อมต่อ MQTT Broker
+client = MQTTClient(CLIENT_ID, MQTT_BROKER)
+client.connect()
+print("เชื่อมต่อ MQTT Broker สำเร็จ:", MQTT_BROKER)
+
+while True:
+    temp, pressure, humidity = sensor.read_compensated_data()   # อ่านค่าที่ชดเชยแล้วจากเซนเซอร์
+    payload = ujson.dumps({
+        "temperature_c": round(temp / 100, 2),          # หน่วยองศาเซลเซียส
+        "pressure_hpa": round(pressure / 25600, 2),      # หน่วยเฮกโตปาสคาล
+        "humidity_percent": round(humidity / 1024, 2),   # หน่วยเปอร์เซ็นต์
+    })
+    client.publish(MQTT_TOPIC, payload)   # ส่งข้อมูล (Publish) ไปยัง Topic บน Broker
+    print("Published:", payload)
+    time.sleep(5)
+```
 
 1\. เปิด VS Code ติดตั้งส่วนขยาย 'MicroPico' เชื่อมต่อ ESP32 แล้วอัปโหลดไฟล์ไดรเวอร์ bme280.py และไฟล์ main.py (โค้ดตามตารางที่ 9.3) ไปยังบอร์ด
 
@@ -371,85 +372,86 @@ MQTT (Message Queuing Telemetry Transport) เป็นโปรโตคอล�
 
 ตารางที่ 9.5 โค้ดภาษา MicroPython สำหรับการบูรณาการเซนเซอร์หลายชนิดเข้ากับ ESP32
 
-| import time                                                                                  |
-|----------------------------------------------------------------------------------------------|
-| import ujson                                                                                 |
-| from machine import Pin, ADC                                                                 |
-| import dht \# ไลบรารีมาตรฐานของ MicroPython สำหรับ DHT11/DHT22                                 |
-|                                                                                              |
-| \# ---------- ตั้งค่าเซนเซอร์ทั้ง 3 ชนิด ----------                                                 |
-| dht_sensor = dht.DHT22(Pin(4)) \# DHT22: ขา GPIO4                                            |
-| ldr = ADC(Pin(34)) \# LDR: ช่องสัญญาณ ADC บน GPIO34                                            |
-| ldr.atten(ADC.ATTN_11DB) \# ขยายช่วงวัดแรงดันเป็น 0-3.3V                                         |
-| trig = Pin(5, Pin.OUT) \# HC-SR04 Trigger: GPIO5                                             |
-| echo = Pin(18, Pin.IN) \# HC-SR04 Echo (ผ่านวงจรแบ่งแรงดันแล้ว): GPIO18                          |
-|                                                                                              |
-| \# ---------- ตัวแปรสำหรับจับเวลาแบบไม่บล็อก (Non-blocking) ----------                            |
-| last_dht_read = time.ticks_ms()                                                              |
-| last_ldr_read = time.ticks_ms()                                                              |
-| last_hcsr04_read = time.ticks_ms()                                                           |
-| DHT_INTERVAL = 2000 \# DHT22 ต้องเว้นระยะอ่านอย่างน้อย 2 วินาที                                     |
-| LDR_INTERVAL = 200 \# อ่านค่าแสงได้บ่อยกว่า เนื่องจากเป็นการอ่าน ADC ตรง                              |
-| HCSR04_INTERVAL = 500 \# อ่านระยะทางทุก 0.5 วินาที                                               |
-|                                                                                              |
-| temperature_c = None                                                                         |
-| humidity_percent = None                                                                      |
-| light_raw = None                                                                             |
-| distance_cm = None                                                                           |
-|                                                                                              |
-|                                                                                              |
-| def read_distance_cm():                                                                      |
-|     trig.value(0)                                                                            |
-|     time.sleep_us(2)                                                                         |
-|     trig.value(1)                                                                            |
-|     time.sleep_us(10) \# ส่งพัลส์ Trigger ความกว้าง 10 ไมโครวินาที                                 |
-|     trig.value(0)                                                                            |
-|     timeout_start = time.ticks_us()                                                          |
-|     while echo.value() == 0:                                                                 |
-|         if time.ticks_diff(time.ticks_us(), timeout_start) \> 30000:                         |
-|             return None \# หมดเวลารอสัญญาณ Echo เริ่มต้น (ไม่พบวัตถุ)                               |
-|     pulse_start = time.ticks_us()                                                            |
-|     while echo.value() == 1:                                                                 |
-|         if time.ticks_diff(time.ticks_us(), pulse_start) \> 30000:                           |
-|             return None                                                                      |
-|     pulse_end = time.ticks_us()                                                              |
-|     duration_us = time.ticks_diff(pulse_end, pulse_start)                                    |
-|     return round((duration_us \* 0.0343) / 2, 1) \# ระยะทาง (ซม.) จากความเร็วเสียง 343 ม./วินาที |
-|                                                                                              |
-|                                                                                              |
-| print("เริ่มอ่านค่าจากเซนเซอร์ 3 ชนิดแบบไม่บล็อก (กด Ctrl+C เพื่อหยุด)")                                |
-| while True:                                                                                  |
-|     now = time.ticks_ms()                                                                    |
-|                                                                                              |
-|     # อ่านค่า DHT22 ทุก 2 วินาที                                                                  |
-|     if time.ticks_diff(now, last_dht_read) \>= DHT_INTERVAL:                                 |
-|         try:                                                                                 |
-|             dht_sensor.measure()                                                             |
-|             temperature_c = dht_sensor.temperature()                                         |
-|             humidity_percent = dht_sensor.humidity()                                         |
-|         except OSError:                                                                      |
-|             pass \# อ่านค่าไม่สำเร็จในรอบนี้ ใช้ค่าล่าสุดที่มีอยู่แทน                                       |
-|         last_dht_read = now                                                                  |
-|                                                                                              |
-|     # อ่านค่า LDR ทุก 0.2 วินาที                                                                  |
-|     if time.ticks_diff(now, last_ldr_read) \>= LDR_INTERVAL:                                 |
-|         light_raw = ldr.read() \# ค่าดิบ 0-4095 (12 บิต)                                        |
-|         last_ldr_read = now                                                                  |
-|                                                                                              |
-|     # อ่านค่า HC-SR04 ทุก 0.5 วินาที                                                              |
-|     if time.ticks_diff(now, last_hcsr04_read) \>= HCSR04_INTERVAL:                           |
-|         distance_cm = read_distance_cm()                                                     |
-|         last_hcsr04_read = now                                                               |
-|                                                                                              |
-|     # ส่งข้อมูลรวมออกทาง Serial เป็นบรรทัด JSON ให้ Dashboard อ่าน                                  |
-|     payload = ujson.dumps({                                                                  |
-|         "temperature_c": temperature_c,                                                      |
-|         "humidity_percent": humidity_percent,                                                |
-|         "light_raw": light_raw,                                                              |
-|         "distance_cm": distance_cm,                                                          |
-|     })                                                                                       |
-|     print(payload)                                                                           |
-|     time.sleep(0.1)                                                                          |
+```python
+import time
+import ujson
+from machine import Pin, ADC
+import dht   # ไลบรารีมาตรฐานของ MicroPython สำหรับ DHT11/DHT22
+
+# ---------- ตั้งค่าเซนเซอร์ทั้ง 3 ชนิด ----------
+dht_sensor = dht.DHT22(Pin(4))          # DHT22: ขา GPIO4
+ldr = ADC(Pin(34))                       # LDR: ช่องสัญญาณ ADC บน GPIO34
+ldr.atten(ADC.ATTN_11DB)                 # ขยายช่วงวัดแรงดันเป็น 0-3.3V
+trig = Pin(5, Pin.OUT)                   # HC-SR04 Trigger: GPIO5
+echo = Pin(18, Pin.IN)                   # HC-SR04 Echo (ผ่านวงจรแบ่งแรงดันแล้ว): GPIO18
+
+# ---------- ตัวแปรสำหรับจับเวลาแบบไม่บล็อก (Non-blocking) ----------
+last_dht_read = time.ticks_ms()
+last_ldr_read = time.ticks_ms()
+last_hcsr04_read = time.ticks_ms()
+DHT_INTERVAL = 2000     # DHT22 ต้องเว้นระยะอ่านอย่างน้อย 2 วินาที
+LDR_INTERVAL = 200      # อ่านค่าแสงได้บ่อยกว่า เนื่องจากเป็นการอ่าน ADC ตรง
+HCSR04_INTERVAL = 500   # อ่านระยะทางทุก 0.5 วินาที
+
+temperature_c = None
+humidity_percent = None
+light_raw = None
+distance_cm = None
+
+
+def read_distance_cm():
+    trig.value(0)
+    time.sleep_us(2)
+    trig.value(1)
+    time.sleep_us(10)      # ส่งพัลส์ Trigger ความกว้าง 10 ไมโครวินาที
+    trig.value(0)
+    timeout_start = time.ticks_us()
+    while echo.value() == 0:
+        if time.ticks_diff(time.ticks_us(), timeout_start) > 30000:
+            return None     # หมดเวลารอสัญญาณ Echo เริ่มต้น (ไม่พบวัตถุ)
+    pulse_start = time.ticks_us()
+    while echo.value() == 1:
+        if time.ticks_diff(time.ticks_us(), pulse_start) > 30000:
+            return None
+    pulse_end = time.ticks_us()
+    duration_us = time.ticks_diff(pulse_end, pulse_start)
+    return round((duration_us * 0.0343) / 2, 1)   # ระยะทาง (ซม.) จากความเร็วเสียง 343 ม./วินาที
+
+
+print("เริ่มอ่านค่าจากเซนเซอร์ 3 ชนิดแบบไม่บล็อก (กด Ctrl+C เพื่อหยุด)")
+while True:
+    now = time.ticks_ms()
+
+    # อ่านค่า DHT22 ทุก 2 วินาที
+    if time.ticks_diff(now, last_dht_read) >= DHT_INTERVAL:
+        try:
+            dht_sensor.measure()
+            temperature_c = dht_sensor.temperature()
+            humidity_percent = dht_sensor.humidity()
+        except OSError:
+            pass   # อ่านค่าไม่สำเร็จในรอบนี้ ใช้ค่าล่าสุดที่มีอยู่แทน
+        last_dht_read = now
+
+    # อ่านค่า LDR ทุก 0.2 วินาที
+    if time.ticks_diff(now, last_ldr_read) >= LDR_INTERVAL:
+        light_raw = ldr.read()   # ค่าดิบ 0-4095 (12 บิต)
+        last_ldr_read = now
+
+    # อ่านค่า HC-SR04 ทุก 0.5 วินาที
+    if time.ticks_diff(now, last_hcsr04_read) >= HCSR04_INTERVAL:
+        distance_cm = read_distance_cm()
+        last_hcsr04_read = now
+
+    # ส่งข้อมูลรวมออกทาง Serial เป็นบรรทัด JSON ให้ Dashboard อ่าน
+    payload = ujson.dumps({
+        "temperature_c": temperature_c,
+        "humidity_percent": humidity_percent,
+        "light_raw": light_raw,
+        "distance_cm": distance_cm,
+    })
+    print(payload)
+    time.sleep(0.1)
+```
 
 1\. เปิด VS Code ติดตั้งส่วนขยาย 'MicroPico' เชื่อมต่อ ESP32 แล้วอัปโหลดไฟล์ main.py (โค้ดตามตารางที่ 9.5) ไปยังบอร์ด
 

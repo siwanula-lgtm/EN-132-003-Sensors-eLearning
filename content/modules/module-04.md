@@ -154,54 +154,55 @@ Load Cell มีหลายชนิดตามรูปแบบโครง�
 
 ตารางที่ 4.4 โค้ดภาษา MicroPython สำหรับการวัดน้ำหนักด้วยโหลดเซลล์และโมดูล HX711
 
-| \# main.py — ESP32 MicroPython: อ่านค่าน้ำหนักจาก Load Cell ผ่านโมดูล HX711                |
-|--------------------------------------------------------------------------------------|
-| \# และส่งออกทาง Serial สำหรับแสดงผลบน Dashboard ของ VS Code (Serial Plotter Extension) |
-|                                                                                      |
-| from machine import Pin \# นำเข้าโมดูลควบคุมขา GPIO                                     |
-| import time \# นำเข้าโมดูลสำหรับหน่วงเวลา                                                |
-|                                                                                      |
-| DT_PIN = 16 \# ขา Data ของ HX711 ต่อกับ GPIO16                                         |
-| SCK_PIN = 4 \# ขา Clock ของ HX711 ต่อกับ GPIO4                                         |
-| CALIBRATION_FACOR = 420.0 \# ค่าคูณปรับเทียบ (ต้องหาจากการทดลองจริงด้วยน้ำหนักมาตรฐาน)        |
-|                                                                                      |
-| dt = Pin(DT_PIN, Pin.IN)                                                             |
-| sck = Pin(SCK_PIN, Pin.OUT)                                                          |
-| sck.value(0)                                                                         |
-|                                                                                      |
-| def hx711_read_raw():                                                                |
-|     # ฟังก์ชันอ่านค่าดิบ 24 บิตจากโมดูล HX711 แบบ bit-bang ผ่านขา Clock/Data                  |
-|     while dt.value() == 1: \# รอจนกว่า HX711 จะพร้อมส่งข้อมูล (DT ลงเป็น 0)                |
-|         time.sleep_us(10)                                                            |
-|     count = 0                                                                        |
-|     for \_ in range(24): \# อ่านข้อมูล 24 บิต ทีละบิตตามจังหวะสัญญาณ Clock                   |
-|         sck.value(1)                                                                 |
-|         count = count \<\< 1                                                         |
-|         sck.value(0)                                                                 |
-|         if dt.value():                                                               |
-|             count += 1                                                               |
-|     sck.value(1) \# พัลส์ที่ 25 กำหนดค่าเกน/ช่องสัญญาณ (Gain 128, Channel A)                |
-|     sck.value(0)                                                                     |
-|     if count & 0x800000: \# แปลงค่าจาก 2's complement 24 บิต เป็นเลขจำนวนเต็มมีเครื่องหมาย  |
-|         count -= 0x1000000                                                           |
-|     return count                                                                     |
-|                                                                                      |
-| def read_weight_grams(tare_offset):                                                  |
-|     # แปลงค่าดิบเป็นน้ำหนักหน่วยกรัม โดยหักค่าออฟเซตจากการตั้งศูนย์ (Tare) และหารด้วยค่าปรับเทียบ     |
-|     raw = hx711_read_raw()                                                           |
-|     grams = (raw - tare_offset) / CALIBRATION_FACOR                                  |
-|     return round(grams, 1)                                                           |
-|                                                                                      |
-| print("กำลังตั้งศูนย์ (Taring)... กรุณาอย่าวางน้ำหนักบน Load Cell")                           |
-| time.sleep(1)                                                                        |
-| tare_offset = hx711_read_raw() \# อ่านค่าดิบตอนไม่มีน้ำหนักไว้เป็นค่าอ้างอิง (ศูนย์)               |
-| print("ตั้งศูนย์เรียบร้อย เริ่มอ่านค่าน้ำหนัก")                                                  |
-|                                                                                      |
-| while True: \# วนซ้ำอ่านค่าตลอดเวลา                                                     |
-|     weight = read_weight_grams(tare_offset)                                          |
-|     # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้  |
-|     print("Weight:{:.1f}".format(weight))                                            |
-|     time.sleep(0.5) \# หน่วงเวลา 0.5 วินาทีก่อนอ่านค่ารอบถัดไป                              |
+```python
+# main.py — ESP32 MicroPython: อ่านค่าน้ำหนักจาก Load Cell ผ่านโมดูล HX711
+# และส่งออกทาง Serial สำหรับแสดงผลบน Dashboard ของ VS Code (Serial Plotter Extension)
+
+from machine import Pin   # นำเข้าโมดูลควบคุมขา GPIO
+import time                # นำเข้าโมดูลสำหรับหน่วงเวลา
+
+DT_PIN = 16                # ขา Data ของ HX711 ต่อกับ GPIO16
+SCK_PIN = 4                # ขา Clock ของ HX711 ต่อกับ GPIO4
+CALIBRATION_FACOR = 420.0  # ค่าคูณปรับเทียบ (ต้องหาจากการทดลองจริงด้วยน้ำหนักมาตรฐาน)
+
+dt = Pin(DT_PIN, Pin.IN)
+sck = Pin(SCK_PIN, Pin.OUT)
+sck.value(0)
+
+def hx711_read_raw():
+    # ฟังก์ชันอ่านค่าดิบ 24 บิตจากโมดูล HX711 แบบ bit-bang ผ่านขา Clock/Data
+    while dt.value() == 1:        # รอจนกว่า HX711 จะพร้อมส่งข้อมูล (DT ลงเป็น 0)
+        time.sleep_us(10)
+    count = 0
+    for _ in range(24):            # อ่านข้อมูล 24 บิต ทีละบิตตามจังหวะสัญญาณ Clock
+        sck.value(1)
+        count = count << 1
+        sck.value(0)
+        if dt.value():
+            count += 1
+    sck.value(1)                   # พัลส์ที่ 25 กำหนดค่าเกน/ช่องสัญญาณ (Gain 128, Channel A)
+    sck.value(0)
+    if count & 0x800000:           # แปลงค่าจาก 2's complement 24 บิต เป็นเลขจำนวนเต็มมีเครื่องหมาย
+        count -= 0x1000000
+    return count
+
+def read_weight_grams(tare_offset):
+    # แปลงค่าดิบเป็นน้ำหนักหน่วยกรัม โดยหักค่าออฟเซตจากการตั้งศูนย์ (Tare) และหารด้วยค่าปรับเทียบ
+    raw = hx711_read_raw()
+    grams = (raw - tare_offset) / CALIBRATION_FACOR
+    return round(grams, 1)
+
+print("กำลังตั้งศูนย์ (Taring)... กรุณาอย่าวางน้ำหนักบน Load Cell")
+time.sleep(1)
+tare_offset = hx711_read_raw()     # อ่านค่าดิบตอนไม่มีน้ำหนักไว้เป็นค่าอ้างอิง (ศูนย์)
+print("ตั้งศูนย์เรียบร้อย เริ่มอ่านค่าน้ำหนัก")
+
+while True:                        # วนซ้ำอ่านค่าตลอดเวลา
+    weight = read_weight_grams(tare_offset)
+    # ส่งค่าออกทาง Serial ในรูปแบบที่ VS Code Dashboard/Serial Plotter อ่านค่าไปพล็อตกราฟได้
+    print("Weight:{:.1f}".format(weight))
+    time.sleep(0.5)                # หน่วงเวลา 0.5 วินาทีก่อนอ่านค่ารอบถัดไป
+```
 
 1\. เปิดโปรแกรม Visual Studio Code แล้วติดตั้งส่วนขยาย 'MicroPico' (หรือ 'Pymakr') จาก Extensions Marketplace เพื่อเชื่อมต่อและอัปโหลดโค้ดไปยัง ESP32
 
